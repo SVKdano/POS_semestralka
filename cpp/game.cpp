@@ -29,7 +29,7 @@ void Game::renderWindow() {
     this->enemy.setSize(sf::Vector2f(TEXTURE_SIZE,TEXTURE_SIZE));
     this->enemy.setPosition(rand() % (WINDOW_X - TEXTURE_SIZE), rand() % (WINDOW_Y - TEXTURE_SIZE));
 
-    this->block.initBlock(200,200, 300, 300, pTextureOne);
+    this->block.generateBlock(200, 200, 300, 300, pTextureOne);
 
     while (window.isOpen())
     {
