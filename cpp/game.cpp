@@ -43,7 +43,7 @@ void Game::renderWindow() {
         window.clear();
         window.draw(this->player);
         window.draw(this->enemy);
-        window.draw(this->block.getRect());
+        window.draw(this->block.getBlock());
         window.display();
     }
 
