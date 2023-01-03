@@ -4,8 +4,9 @@
 
 #include "../head/game.h"
 
-#define WINDOW_X  2000
-#define WINDOW_Y  1200
+#define WINDOW_X  1200
+#define WINDOW_Y  800
+#define TEXTURE_SIZE 100
 
 Game::Game() {
 }
@@ -13,18 +14,20 @@ Game::Game() {
 void Game::renderWindow() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
 
-    sf::Texture texturePlayOne;
-    texturePlayOne.loadFromFile("C:\\CLionProjects\\Bulanci\\imgs\\bulanek.png");
+    sf::Texture texturePlayer[2];
+    texturePlayer[0].loadFromFile("../imgs/bulanek.png");
+    texturePlayer[1].loadFromFile("../imgs/bulanekEnemy.png");
 
-    const sf::Texture *pTexture = &texturePlayOne;
+    const sf::Texture *pTextureOne = &texturePlayer[0];
+    const sf::Texture *pTextureTwo = &texturePlayer[1];
 
-    this->player.setTexture(pTexture);
-    this->player.setSize(sf::Vector2f(100.0,100.0));
-    this->player.setPosition(rand() % WINDOW_X, rand() % WINDOW_Y);
+    this->player.setTexture(pTextureOne);
+    this->player.setSize(sf::Vector2f(TEXTURE_SIZE,TEXTURE_SIZE));
+    this->player.setPosition(rand() % (WINDOW_X - TEXTURE_SIZE), rand() % (WINDOW_Y - TEXTURE_SIZE));
 
-    this->enemy.setTexture(pTexture);
-    this->enemy.setSize(sf::Vector2f(100.0,100.0));
-    this->enemy.setPosition(rand() % WINDOW_X, rand() % WINDOW_Y);
+    this->enemy.setTexture(pTextureTwo);
+    this->enemy.setSize(sf::Vector2f(TEXTURE_SIZE,TEXTURE_SIZE));
+    this->enemy.setPosition(rand() % (WINDOW_X - TEXTURE_SIZE), rand() % (WINDOW_Y - TEXTURE_SIZE));
 
     while (window.isOpen())
     {
