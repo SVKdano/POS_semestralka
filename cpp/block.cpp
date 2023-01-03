@@ -5,14 +5,14 @@
 #include "../head/block.h"
 
 Block::Block() {
-    initBlock(0, 0, 0, 0, nullptr);
+    generateBlock(0, 0, 0, 0, nullptr);
 }
 
 Block::~Block() {
 
 }
 
-void Block::initBlock(int x, int y, int xP, int yP, const sf::Texture* texture) {
+void Block::generateBlock(int x, int y, int xP, int yP, const sf::Texture* texture) {
     this->rect.setSize(sf::Vector2f(x,y));
     this->rect.setPosition(xP,yP);
     this->rect.setFillColor(sf::Color::Blue);
