@@ -29,6 +29,8 @@ void Game::renderWindow() {
     this->enemy.setSize(sf::Vector2f(TEXTURE_SIZE,TEXTURE_SIZE));
     this->enemy.setPosition(rand() % (WINDOW_X - TEXTURE_SIZE), rand() % (WINDOW_Y - TEXTURE_SIZE));
 
+    this->block.initBlock(200,200, 300, 300, pTextureOne);
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -41,8 +43,10 @@ void Game::renderWindow() {
         window.clear();
         window.draw(this->player);
         window.draw(this->enemy);
+        window.draw(this->block.getRect());
         window.display();
     }
 
 
 }
+
