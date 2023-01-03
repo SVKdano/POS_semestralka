@@ -11,7 +11,7 @@
 Game::Game() {
 }
 
-void Game::renderWindow() {
+void Game::render() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
 
     sf::Texture texturePlayer[2];
@@ -21,13 +21,11 @@ void Game::renderWindow() {
     const sf::Texture *pTextureOne = &texturePlayer[0];
     const sf::Texture *pTextureTwo = &texturePlayer[1];
 
-    this->player.setTexture(pTextureOne);
-    this->player.setSize(sf::Vector2f(TEXTURE_SIZE,TEXTURE_SIZE));
-    this->player.setPosition(rand() % (WINDOW_X - TEXTURE_SIZE), rand() % (WINDOW_Y - TEXTURE_SIZE));
+    sf::RectangleShape playerClassROne = this->playerClass
+            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureOne);
 
-    this->enemy.setTexture(pTextureTwo);
-    this->enemy.setSize(sf::Vector2f(TEXTURE_SIZE,TEXTURE_SIZE));
-    this->enemy.setPosition(rand() % (WINDOW_X - TEXTURE_SIZE), rand() % (WINDOW_Y - TEXTURE_SIZE));
+    sf::RectangleShape playerClassRTwo = this->playerClass
+            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureTwo);
 
     this->block.generateBlock(200, 200, 300, 300, pTextureOne);
 
@@ -41,12 +39,10 @@ void Game::renderWindow() {
         }
 
         window.clear();
-        window.draw(this->player);
-        window.draw(this->enemy);
+        window.draw(playerClassROne);
+        window.draw(playerClassRTwo);
         window.draw(this->block.getBlock());
         window.display();
     }
-
-
 }
 

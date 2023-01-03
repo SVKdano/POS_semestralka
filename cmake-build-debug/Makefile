@@ -176,6 +176,30 @@ cpp/game.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Bulanci.dir\build.make CMakeFiles/Bulanci.dir/cpp/game.cpp.s
 .PHONY : cpp/game.cpp.s
 
+cpp/player.obj: cpp/player.cpp.obj
+.PHONY : cpp/player.obj
+
+# target to build an object file
+cpp/player.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Bulanci.dir\build.make CMakeFiles/Bulanci.dir/cpp/player.cpp.obj
+.PHONY : cpp/player.cpp.obj
+
+cpp/player.i: cpp/player.cpp.i
+.PHONY : cpp/player.i
+
+# target to preprocess a source file
+cpp/player.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Bulanci.dir\build.make CMakeFiles/Bulanci.dir/cpp/player.cpp.i
+.PHONY : cpp/player.cpp.i
+
+cpp/player.s: cpp/player.cpp.s
+.PHONY : cpp/player.s
+
+# target to generate assembly for a file
+cpp/player.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Bulanci.dir\build.make CMakeFiles/Bulanci.dir/cpp/player.cpp.s
+.PHONY : cpp/player.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -215,6 +239,9 @@ help:
 	@echo ... cpp/game.obj
 	@echo ... cpp/game.i
 	@echo ... cpp/game.s
+	@echo ... cpp/player.obj
+	@echo ... cpp/player.i
+	@echo ... cpp/player.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s

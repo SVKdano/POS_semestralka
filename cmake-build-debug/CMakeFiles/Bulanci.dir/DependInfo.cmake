@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "C:/CLionProjects/Bulanci/cpp/block.cpp" "CMakeFiles/Bulanci.dir/cpp/block.cpp.obj" "gcc" "CMakeFiles/Bulanci.dir/cpp/block.cpp.obj.d"
   "C:/CLionProjects/Bulanci/cpp/game.cpp" "CMakeFiles/Bulanci.dir/cpp/game.cpp.obj" "gcc" "CMakeFiles/Bulanci.dir/cpp/game.cpp.obj.d"
+  "C:/CLionProjects/Bulanci/cpp/player.cpp" "CMakeFiles/Bulanci.dir/cpp/player.cpp.obj" "gcc" "CMakeFiles/Bulanci.dir/cpp/player.cpp.obj.d"
   "C:/CLionProjects/Bulanci/main.cpp" "CMakeFiles/Bulanci.dir/main.cpp.obj" "gcc" "CMakeFiles/Bulanci.dir/main.cpp.obj.d"
   )
 

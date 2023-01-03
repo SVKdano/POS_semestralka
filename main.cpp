@@ -5,6 +5,6 @@
 int main()
 {
     Game* game = new Game();
-    game->renderWindow();
+    game->render();
     return 0;
 }

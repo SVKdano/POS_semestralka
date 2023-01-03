@@ -90,10 +90,16 @@
 		<Unit filename="C:/CLionProjects/Bulanci/cpp/game.cpp">
 			<Option target="Bulanci"/>
 		</Unit>
+		<Unit filename="C:/CLionProjects/Bulanci/cpp/player.cpp">
+			<Option target="Bulanci"/>
+		</Unit>
 		<Unit filename="C:/CLionProjects/Bulanci/head/block.h">
 			<Option target="Bulanci"/>
 		</Unit>
 		<Unit filename="C:/CLionProjects/Bulanci/head/game.h">
+			<Option target="Bulanci"/>
+		</Unit>
+		<Unit filename="C:/CLionProjects/Bulanci/head/player.h">
 			<Option target="Bulanci"/>
 		</Unit>
 		<Unit filename="C:/CLionProjects/Bulanci/main.cpp">

@@ -236,4 +236,5 @@ CMakeFiles/Bulanci.dir/main.cpp.obj: C:\CLionProjects\Bulanci\main.cpp \
  C:/SFML/include/SFML/Graphics/Sprite.hpp \
  C:/SFML/include/SFML/Graphics/Text.hpp \
  C:/SFML/include/SFML/Graphics/VertexBuffer.hpp \
- C:\CLionProjects\Bulanci\head/block.h
+ C:\CLionProjects\Bulanci\head/block.h \
+ C:\CLionProjects\Bulanci\head/player.h
