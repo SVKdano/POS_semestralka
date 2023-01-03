@@ -6,6 +6,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Bulanci.dir/cpp/block.cpp.obj.d"
   "CMakeFiles/Bulanci.dir/cpp/game.cpp.obj"
   "CMakeFiles/Bulanci.dir/cpp/game.cpp.obj.d"
+  "CMakeFiles/Bulanci.dir/cpp/player.cpp.obj"
+  "CMakeFiles/Bulanci.dir/cpp/player.cpp.obj.d"
   "CMakeFiles/Bulanci.dir/main.cpp.obj"
   "CMakeFiles/Bulanci.dir/main.cpp.obj.d"
   "libBulanci.dll.a"

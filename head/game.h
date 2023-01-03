@@ -6,14 +6,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "block.h"
+#include "player.h"
 
 class Game {
-    private:
-        sf::RectangleShape player;
-        sf::RectangleShape enemy;
-        Block block;
-    public:
-        Game();
-        void renderWindow();
-
+private:
+    Player playerClass;
+    Block block;
+public:
+    Game();
+    void render();
 };
