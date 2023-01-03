@@ -65,6 +65,14 @@ build CMakeFiles/Bulanci.dir/cpp/game.cpp.obj: CXX_COMPILER__Bulanci_Debug C$:/C
   OBJECT_DIR = CMakeFiles\Bulanci.dir
   OBJECT_FILE_DIR = CMakeFiles\Bulanci.dir\cpp
 
+build CMakeFiles/Bulanci.dir/cpp/player.cpp.obj: CXX_COMPILER__Bulanci_Debug C$:/CLionProjects/Bulanci/cpp/player.cpp || cmake_object_order_depends_target_Bulanci
+  DEFINES = -DSFML_STATIC
+  DEP_FILE = CMakeFiles\Bulanci.dir\cpp\player.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -std=gnu++14
+  INCLUDES = -isystem C:/SFML/include
+  OBJECT_DIR = CMakeFiles\Bulanci.dir
+  OBJECT_FILE_DIR = CMakeFiles\Bulanci.dir\cpp
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Bulanci
@@ -73,7 +81,7 @@ build CMakeFiles/Bulanci.dir/cpp/game.cpp.obj: CXX_COMPILER__Bulanci_Debug C$:/C
 #############################################
 # Link the executable Bulanci.exe
 
-build Bulanci.exe: CXX_EXECUTABLE_LINKER__Bulanci_Debug CMakeFiles/Bulanci.dir/main.cpp.obj CMakeFiles/Bulanci.dir/cpp/game.cpp.obj | C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libsfml-graphics-s-d.a C$:/SFML/lib/libsfml-audio-s-d.a C$:/SFML/lib/libsfml-network-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libfreetype.a C$:/SFML/lib/libopenal32.a C$:/SFML/lib/libvorbisfile.a C$:/SFML/lib/libvorbisenc.a C$:/SFML/lib/libvorbis.a C$:/SFML/lib/libogg.a C$:/SFML/lib/libFLAC.a C$:/SFML/lib/libsfml-system-s-d.a
+build Bulanci.exe: CXX_EXECUTABLE_LINKER__Bulanci_Debug CMakeFiles/Bulanci.dir/main.cpp.obj CMakeFiles/Bulanci.dir/cpp/game.cpp.obj CMakeFiles/Bulanci.dir/cpp/player.cpp.obj | C$:/SFML/lib/libsfml-system-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libsfml-graphics-s-d.a C$:/SFML/lib/libsfml-audio-s-d.a C$:/SFML/lib/libsfml-network-s-d.a C$:/SFML/lib/libsfml-window-s-d.a C$:/SFML/lib/libfreetype.a C$:/SFML/lib/libopenal32.a C$:/SFML/lib/libvorbisfile.a C$:/SFML/lib/libvorbisenc.a C$:/SFML/lib/libvorbis.a C$:/SFML/lib/libogg.a C$:/SFML/lib/libFLAC.a C$:/SFML/lib/libsfml-system-s-d.a
   FLAGS = -g
   LINK_LIBRARIES = C:/SFML/lib/libsfml-system-s-d.a  C:/SFML/lib/libsfml-window-s-d.a  C:/SFML/lib/libsfml-graphics-s-d.a  C:/SFML/lib/libsfml-audio-s-d.a  C:/SFML/lib/libsfml-network-s-d.a  C:/SFML/lib/libsfml-window-s-d.a  -lgdi32  -lOpenGL32  C:/SFML/lib/libfreetype.a  C:/SFML/lib/libopenal32.a  C:/SFML/lib/libvorbisfile.a  C:/SFML/lib/libvorbisenc.a  C:/SFML/lib/libvorbis.a  C:/SFML/lib/libogg.a  C:/SFML/lib/libFLAC.a  C:/SFML/lib/libsfml-system-s-d.a  -lwinmm  -lws2_32  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Bulanci.dir

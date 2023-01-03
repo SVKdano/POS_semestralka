@@ -3,7 +3,7 @@ project(Bulanci)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Bulanci main.cpp head/game.h cpp/game.cpp)
+add_executable(Bulanci main.cpp head/game.h cpp/game.cpp head/player.h cpp/player.cpp)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/SFML/lib/cmake/SFML)
