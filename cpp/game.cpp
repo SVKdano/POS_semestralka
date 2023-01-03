@@ -3,7 +3,6 @@
 //
 
 #include "../head/game.h"
-#include <SFML/Graphics.hpp>
 
 #define WINDOW_X  2000
 #define WINDOW_Y  1200
@@ -13,13 +12,19 @@ Game::Game() {
 
 void Game::renderWindow() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
-    sf::Texture texture;
-    texture.loadFromFile("../imgs/bulanek.png"/*, sf::IntRect(0,0,100,100)*/);
-    texture.setSmooth(true);
 
-    sf::Sprite sprite;
-    sprite.setTexture(texture);
-    sprite.setPosition(rand() % WINDOW_X, rand() % WINDOW_Y);
+    sf::Texture texturePlayOne;
+    texturePlayOne.loadFromFile("C:\\CLionProjects\\Bulanci\\imgs\\bulanek.png");
+
+    const sf::Texture *pTexture = &texturePlayOne;
+
+    this->player.setTexture(pTexture);
+    this->player.setSize(sf::Vector2f(100.0,100.0));
+    this->player.setPosition(rand() % WINDOW_X, rand() % WINDOW_Y);
+
+    this->enemy.setTexture(pTexture);
+    this->enemy.setSize(sf::Vector2f(100.0,100.0));
+    this->enemy.setPosition(rand() % WINDOW_X, rand() % WINDOW_Y);
 
     while (window.isOpen())
     {
@@ -31,7 +36,8 @@ void Game::renderWindow() {
         }
 
         window.clear();
-        window.draw(sprite);
+        window.draw(this->player);
+        window.draw(this->enemy);
         window.display();
     }
 
