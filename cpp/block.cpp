@@ -13,13 +13,13 @@ Block::~Block() {
 }
 
 void Block::generateBlock(int x, int y, int xP, int yP, const sf::Texture* texture) {
-    this->rect.setSize(sf::Vector2f(x,y));
-    this->rect.setPosition(xP,yP);
-    this->rect.setFillColor(sf::Color::Blue);
+    this->block.setSize(sf::Vector2f(x, y));
+    this->block.setPosition(xP, yP);
+    this->block.setFillColor(sf::Color::Blue);
 }
 
-const sf::RectangleShape &Block::getRect() const {
-    return this->rect;
+const sf::RectangleShape &Block::getBlock() const {
+    return this->block;
 }
 
 int Block::getX() const {

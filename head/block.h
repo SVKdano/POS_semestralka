@@ -7,7 +7,7 @@
 
 class Block {
 private:
-    sf::RectangleShape rect;
+    sf::RectangleShape block;
     int x;
     int y;
 
@@ -18,7 +18,7 @@ public:
 
     void generateBlock(int x, int y, int xP, int yP, const sf::Texture* texture);
 
-    const sf::RectangleShape& getRect() const;
+    const sf::RectangleShape& getBlock() const;
 
     int getX() const;
 
