@@ -15,19 +15,28 @@ void Game::render() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
     sf::Vector2f movement;
 
-    sf::Texture texturePlayer[4];
-    texturePlayer[0].loadFromFile("../imgs/BlueDown.png");
-    texturePlayer[1].loadFromFile("../imgs/RedDown.png");
-    texturePlayer[2].loadFromFile("../imgs/home.png");
-    texturePlayer[3].loadFromFile("../imgs/stone.png");
+    sf::Texture movementTextures[4];
+    movementTextures[0].loadFromFile("../imgs/BlueDown.png");
+    movementTextures[1].loadFromFile("../imgs/BlueUp.png");
+    movementTextures[2].loadFromFile("../imgs/BlueLeft.png");
+    movementTextures[3].loadFromFile("../imgs/BlueRight.png");
 
-    const sf::Texture *pTextureOne = &texturePlayer[0];
-    const sf::Texture *pTextureTwo = &texturePlayer[1];
-    const sf::Texture *pTextureHome = &texturePlayer[2];
-    const sf::Texture *pTextureStone = &texturePlayer[3];
+    const sf::Texture *playerDown = & movementTextures[0];
+    const sf::Texture *playerUp = & movementTextures[1];
+    const sf::Texture *playerLeft = & movementTextures[2];
+    const sf::Texture *playerRight = & movementTextures[3];
+
+    sf::Texture texturePlayer[3];
+    texturePlayer[0].loadFromFile("../imgs/RedDown.png");
+    texturePlayer[1].loadFromFile("../imgs/home.png");
+    texturePlayer[2].loadFromFile("../imgs/stone.png");
+
+    const sf::Texture *pTextureTwo = &texturePlayer[0];
+    const sf::Texture *pTextureHome = &texturePlayer[1];
+    const sf::Texture *pTextureStone = &texturePlayer[2];
 
     sf::RectangleShape playerClassROne = this->playerClass
-            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureOne);
+            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,playerDown);
 
     sf::RectangleShape playerClassRTwo = this->playerClass
             .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureTwo);
@@ -46,14 +55,22 @@ void Game::render() {
             {
                 processEvent(event.key.code, true);
 
-                if (up)
-                    playerClassROne.move(0.0f,-7.0f);
-                if (down)
-                    playerClassROne.move(0.0f,7.0f);
-                if (right)
-                    playerClassROne.move(7.0f,0.0f);
-                if (left)
-                    playerClassROne.move(-7.0f,0.0f);
+                if (up) {
+                    playerClassROne.move(0.0f, -7.0f);
+                    playerClassROne.setTexture(playerUp);
+                }
+                if (down) {
+                    playerClassROne.move(0.0f, 7.0f);
+                    playerClassROne.setTexture(playerDown);
+                }
+                if (right) {
+                    playerClassROne.move(7.0f, 0.0f);
+                    playerClassROne.setTexture(playerRight);
+                }
+                if (left) {
+                    playerClassROne.move(-7.0f, 0.0f);
+                    playerClassROne.setTexture(playerLeft);
+                }
                 if (space)
                     playerClass.shoot();
             }
