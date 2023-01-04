@@ -16,15 +16,11 @@ void Game::render() {
     sf::Vector2f movement;
 
     sf::Texture movementTextures[4];
-    movementTextures[0].loadFromFile("../imgs/BlueDown.png");
-    movementTextures[1].loadFromFile("../imgs/BlueUp.png");
-    movementTextures[2].loadFromFile("../imgs/BlueLeft.png");
-    movementTextures[3].loadFromFile("../imgs/BlueRight.png");
+    movementTextures[0].loadFromFile("../imgs/BlueUp.png");
+    movementTextures[1].loadFromFile("../imgs/BlueRight.png");
+    movementTextures[2].loadFromFile("../imgs/BlueDown.png");
+    movementTextures[3].loadFromFile("../imgs/BlueLeft.png");
 
-    const sf::Texture *playerDown = & movementTextures[0];
-    const sf::Texture *playerUp = & movementTextures[1];
-    const sf::Texture *playerLeft = & movementTextures[2];
-    const sf::Texture *playerRight = & movementTextures[3];
 
     sf::Texture texturePlayer[3];
     texturePlayer[0].loadFromFile("../imgs/RedDown.png");
@@ -35,11 +31,10 @@ void Game::render() {
     const sf::Texture *pTextureHome = &texturePlayer[1];
     const sf::Texture *pTextureStone = &texturePlayer[2];
 
-    sf::RectangleShape playerClassROne = this->playerClass
-            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,playerDown);
-
     sf::RectangleShape playerClassRTwo = this->playerClass
             .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureTwo);
+    this->playerClass
+            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,movementTextures);
 
     this->home.generateBlock(200, 200, 300, 300, pTextureHome);
     this->stone.generateBlock(130,130,rand() % (WINDOW_X - 130), rand() % (WINDOW_Y - 130), pTextureStone);
@@ -56,23 +51,26 @@ void Game::render() {
                 processEvent(event.key.code, true);
 
                 if (up) {
-                    playerClassROne.move(0.0f, -7.0f);
-                    playerClassROne.setTexture(playerUp);
+                    this->playerClass.setDirection(0);
+                    this->playerClass.move();
                 }
                 if (down) {
-                    playerClassROne.move(0.0f, 7.0f);
-                    playerClassROne.setTexture(playerDown);
+                    this->playerClass.setDirection(2);
+                    this->playerClass.move();
                 }
                 if (right) {
-                    playerClassROne.move(7.0f, 0.0f);
-                    playerClassROne.setTexture(playerRight);
+                    this->playerClass.setDirection(1);
+                    this->playerClass.move();
                 }
                 if (left) {
-                    playerClassROne.move(-7.0f, 0.0f);
-                    playerClassROne.setTexture(playerLeft);
+                    this->playerClass.setDirection(3);
+                    this->playerClass.move();
                 }
-                if (space)
+                if (space){
                     playerClass.shoot();
+                }
+                if (event.key.code == sf::Keyboard::Escape)
+                    window.close();
             }
 
             if (event.type == sf::Event::KeyReleased)
@@ -85,8 +83,8 @@ void Game::render() {
         }
         rmBullets(playerClass.getBullets());
         window.clear();
-        window.draw(playerClassROne);
         window.draw(playerClassRTwo);
+        window.draw(playerClass.getPlayer());
         window.draw(this->home.getBlock());
         window.draw(this->stone.getBlock());
         for (auto &bullet : playerClass.getBullets())
@@ -95,6 +93,7 @@ void Game::render() {
         }
         window.display();
     }
+
 }
 
 void Game::processEvent(sf::Keyboard::Key key, bool checkPressed) {
@@ -125,10 +124,10 @@ void Game::processEvent(sf::Keyboard::Key key, bool checkPressed) {
 void Game::rmBullets(std::vector<Bullet *> bullets) {
     if (!bullets.empty()) {
         for (unsigned int i = 0; i < bullets.size(); i++) {
-            if (abs(bullets[i]->getPositionX() > 1300)) {
+            if (abs(bullets[i]->getPositionX()) > 1200) {
                 bullets.erase(bullets.begin() + (i++));
             }
-            if (abs(bullets[i]->getPositionY() > 900)) {
+            else if (abs(bullets[i]->getPositionY()) > 800) {
                 bullets.erase(bullets.begin() + (i++));
             }
         }

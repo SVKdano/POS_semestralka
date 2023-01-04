@@ -13,11 +13,11 @@ private:
     Player playerClass;
     Block home;
     Block stone;
-    bool up;
-    bool down;
-    bool right;
-    bool left;
-    bool space;
+    bool up = false;
+    bool down = false;
+    bool right = false;
+    bool left = false;
+    bool space = false;
 public:
     Game();
     void render();

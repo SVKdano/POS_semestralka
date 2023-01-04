@@ -13,7 +13,7 @@ Bullet::~Bullet() {
 }
 
 void Bullet::generateBullet(int direction, int positionX, int positionY) {
-    this->bullet.setSize(sf::Vector2f(10,5));
+    this->bullet.setSize(sf::Vector2f(5,5));
     this->bullet.setFillColor(sf::Color::White);
     this->setDirectionBullet(direction);
     if (this->directionBullet == 1){

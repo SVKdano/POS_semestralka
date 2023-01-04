@@ -1,3 +1,0 @@
-C:/CLionProjects/Bulanci/cmake-build-debug/CMakeFiles/Bulanci.dir
-C:/CLionProjects/Bulanci/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/CLionProjects/Bulanci/cmake-build-debug/CMakeFiles/rebuild_cache.dir
