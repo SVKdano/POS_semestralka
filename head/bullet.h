@@ -7,14 +7,23 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 #include <SFML/Audio.hpp>
+#include <iostream>
 
 class Bullet {
 private:
 int directionBullet;
 sf::RectangleShape bullet;
 
+//news
+sf::Sprite shape;
+
+sf::Vector2f direction;
+float speed;
+
 public:
     Bullet(int direction, int positionX, int positionY);
+
+    Bullet(sf::Texture* texture, float positionX, float positionY, float directionX, float directionY, float mSpeed);
 
     virtual ~Bullet();
 
@@ -33,4 +42,10 @@ public:
     int getPositionY();
 
     void setBulletPosition(int positionX, int positionY);
+
+    //news
+    void update();
+    void render(sf::RenderTarget* target);
+
+    const sf::FloatRect getBounds() const;
 };

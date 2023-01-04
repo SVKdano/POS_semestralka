@@ -8,8 +8,17 @@ Bullet::Bullet(int direction, int positionX, int positionY) {
     this->generateBullet(direction, positionX, positionY);
 }
 
+Bullet::Bullet(sf::Texture* texture, float positionX, float positionY, float directionX, float directionY, float mSpeed) {
+    this->shape.setTexture(*texture);
+    this->shape.setPosition(positionX, positionY);
+    this->direction.x = directionX;
+    this->direction.y = directionY;
+    this->speed = mSpeed;
+
+}
+
 Bullet::~Bullet() {
-    delete(this);
+
 }
 
 void Bullet::generateBullet(int direction, int positionX, int positionY) {
@@ -62,3 +71,17 @@ int Bullet::getPositionY() {
 void Bullet::setBulletPosition(int positionX, int positionY) {
     this->bullet.setPosition(positionX, positionY);
 }
+
+void Bullet::update() {
+    this->shape.move(this->speed * this->direction);
+}
+
+void Bullet::render(sf::RenderTarget *target) {
+    target->draw(this->shape);
+}
+
+const sf::FloatRect Bullet::getBounds() const {
+    return this->shape.getGlobalBounds();
+}
+
+

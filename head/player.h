@@ -45,7 +45,7 @@ class Player {
 
         void setAlive(bool alive);
 
-        void shoot();
+        void shoot(std::map<std::string, sf::Texture*> textures);
 
         void move();
 

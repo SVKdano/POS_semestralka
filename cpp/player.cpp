@@ -11,7 +11,7 @@ Player::Player() {
 }
 
 Player::~Player() {
-    for (auto &bullet : this->bullets) {
+    for (auto *bullet : this->bullets) {
         delete bullet;
     }
 }
@@ -40,10 +40,8 @@ void Player::setDirection(int direction) {
     Player::direction = direction;
 }
 
-void Player::shoot() {
-    Bullet* bullet;
-    bullet = new Bullet(this->direction,this->getPlayer().getPosition().x + 50,this->getPlayer().getPosition().y + 50);
-    this->bullets.push_back(bullet);
+void Player::shoot(std::map<std::string, sf::Texture*> textures) {
+    this->bullets.push_back(new Bullet(textures["BULLET"],0.f, 0.f, 0.f, 0.f, 0.f));
 }
 
 const std::vector<Bullet *> &Player::getBullets() const {

@@ -10,12 +10,17 @@
 
 Game::Game() {
     this->initWindow();
+    this->initTextures();
     this->initNewPlayer();
 }
 
 Game::~Game() {
     delete this->gWindow;
     delete this->newPlayer;
+
+    for (auto &x : this->textures) {
+        delete x.second;
+    }
 }
 
 void Game::render() {
@@ -75,7 +80,7 @@ void Game::render() {
                     this->playerClass.move();
                 }
                 if (space){
-                    playerClass.shoot();
+                    playerClass.shoot(this->textures);
                 }
                 if (event.key.code == sf::Keyboard::Escape)
                     window.close();
@@ -151,7 +156,7 @@ void Game::initWindow() {
     this->gWindow->setVerticalSyncEnabled(false);
 }
 
-void Game::updateWindow() {
+void Game::updateEvents() {
     sf::Event e;
 
     while (this->gWindow->pollEvent(e)) {
@@ -162,7 +167,9 @@ void Game::updateWindow() {
             this->gWindow->close();
         }
     }
+}
 
+void Game::updateControls() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         this->newPlayer->movePlayer(-1.0f, 0.0f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
@@ -171,11 +178,26 @@ void Game::updateWindow() {
         this->newPlayer->movePlayer(1.0f, 0.0f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         this->newPlayer->movePlayer(0.0f, 1.0f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        this->newPlayer->shoot(this->textures);
+    }
+
+}
+
+void Game::updateWindow() {
+    this->updateEvents();
+
+    this->updateControls();
+
+    this->updateBullets();
 }
 
 void Game::renderWindow() {
     this->gWindow->clear();
     this->newPlayer->renderPlayer(*this->gWindow);
+    for(auto *bullet : this->newPlayer->getBullets()) {
+        bullet->render(this->gWindow);
+    }
     this->gWindow->display();
 }
 
@@ -189,4 +211,17 @@ void Game::runGame() {
 void Game::initNewPlayer() {
     this->newPlayer = new Player();
 }
+
+void Game::initTextures() {
+    this->textures["BULLET"] = new sf::Texture();
+    this->textures["BULLET"]->loadFromFile("../imgs/strela.png");
+}
+
+void Game::updateBullets() {
+    for(auto *bullet : this->newPlayer->getBullets()) {
+        bullet->update();
+    }
+}
+
+
 
