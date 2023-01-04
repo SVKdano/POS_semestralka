@@ -21,6 +21,10 @@ Game::~Game() {
     for (auto &x : this->textures) {
         delete x.second;
     }
+
+    for (auto *bullet : this->bullets) {
+        delete bullet;
+    }
 }
 
 void Game::render() {
@@ -94,7 +98,7 @@ void Game::render() {
         for (auto &bullet : playerClass.getBullets()) {
             bullet->move();
         }
-        rmBullets(playerClass.getBullets());
+
         window.clear();
         window.draw(playerClassRTwo);
         window.draw(playerClass.getPlayer());
@@ -134,16 +138,16 @@ void Game::processEvent(sf::Keyboard::Key key, bool checkPressed) {
 
 }
 
-void Game::rmBullets(std::vector<Bullet *> bullets) {
-    if (!bullets.empty()) {
-        for (unsigned int i = 0; i < bullets.size(); i++) {
-            if (abs(bullets[i]->getPositionX()) > 1200) {
-                bullets.erase(bullets.begin() + (i++));
-            }
-            else if (abs(bullets[i]->getPositionY()) > 800) {
-                bullets.erase(bullets.begin() + (i++));
-            }
+void Game::rmBullets(std::vector<Bullet *> &bullets) {
+    unsigned counter = 0;
+
+    for (auto *bullet : bullets) {
+        if (bullet->getBounds().top + bullet->getBounds().height < 0.f) {
+            delete bullets.at(counter);
+            bullets.erase(bullets.begin() + counter);
+            --counter;
         }
+        ++counter;
     }
 }
 
@@ -178,8 +182,10 @@ void Game::updateControls() {
         this->newPlayer->movePlayer(1.0f, 0.0f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         this->newPlayer->movePlayer(0.0f, 1.0f);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        this->newPlayer->shoot(this->textures);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->newPlayer->canShoot()) {
+        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->newPlayer->getPosition().x,
+                                           this->newPlayer->getPosition().y, this->newPlayer->getDirBullet().x,
+                                           this->newPlayer->getDirBullet().y, 15.f));
     }
 
 }
@@ -189,13 +195,15 @@ void Game::updateWindow() {
 
     this->updateControls();
 
+    this->newPlayer->updatePlayer();
+
     this->updateBullets();
 }
 
 void Game::renderWindow() {
     this->gWindow->clear();
     this->newPlayer->renderPlayer(*this->gWindow);
-    for(auto *bullet : this->newPlayer->getBullets()) {
+    for(auto *bullet : this->bullets) {
         bullet->render(this->gWindow);
     }
     this->gWindow->display();
@@ -218,10 +226,22 @@ void Game::initTextures() {
 }
 
 void Game::updateBullets() {
-    for(auto *bullet : this->newPlayer->getBullets()) {
+    unsigned counter = 0;
+    for(auto *bullet : this->bullets) {
         bullet->update();
+        if (bullet->getBounds().top + bullet->getBounds().height < 0.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+
+            std::cout << this->bullets.size() << "\n";
+        }
+        ++counter;
     }
+
 }
+
+
 
 
 

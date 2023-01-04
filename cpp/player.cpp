@@ -4,10 +4,9 @@
 #include "../head/player.h"
 
 Player::Player() {
-    this->speedOfMovement = 7.0f;
-
     this->initTexture();
     this->initSprite();
+    this->initVariables();
 }
 
 Player::~Player() {
@@ -41,7 +40,7 @@ void Player::setDirection(int direction) {
 }
 
 void Player::shoot(std::map<std::string, sf::Texture*> textures) {
-    this->bullets.push_back(new Bullet(textures["BULLET"],0.f, 0.f, 0.f, 0.f, 0.f));
+    this->bullets.push_back(new Bullet(textures["BULLET"], this->sprite.getPosition().x, this->sprite.getPosition().y, dirBullet.x, dirBullet.y, 15.f));
 }
 
 const std::vector<Bullet *> &Player::getBullets() const {
@@ -80,7 +79,8 @@ void Player::move() {
 }
 
 void Player::updatePlayer() {
-
+    this->updateDirBullet();
+    this->updateCD();
 }
 
 void Player::renderPlayer(sf::RenderTarget &renderTarget) {
@@ -98,6 +98,58 @@ void Player::initTexture() {
 void Player::initSprite() {
     this->sprite.setTexture(this->texture);
 }
+
+const sf::Vector2f &Player::getDirBullet() const {
+    return this->dirBullet;
+}
+
+void Player::updateDirBullet() {
+    if (this->direction == 0) {
+        this->dirBullet.x = 0.f;
+        this->dirBullet.y = -1.f;
+    }
+    if (this->direction == 1) {
+        this->dirBullet.x = 1.f;
+        this->dirBullet.y = 0.f;
+    }
+    if (this->direction == 2) {
+        this->dirBullet.x = 0.f;
+        this->dirBullet.y = 1.f;
+    }
+    if (this->direction == 3) {
+        this->dirBullet.x = -1.f;
+        this->dirBullet.y = 0.f;
+    }
+}
+
+const sf::Vector2f &Player::getPosition() const {
+    return this->sprite.getPosition();
+}
+
+void Player::updateCD() {
+    if(this->shootingCD < this->shootingCDMax) {
+        this->shootingCD += 1.f;
+    }
+}
+
+const bool Player::canShoot() {
+    if(this->shootingCD >= this->shootingCDMax) {
+        this->shootingCD = 0.f;
+        return true;
+    }
+    return false;
+}
+
+void Player::initVariables() {
+    this->speedOfMovement = 7.f;
+    this->dirBullet.x = 0.f;
+    this->dirBullet.y = -1.f;
+    this->shootingCDMax = 10.f;
+    this->shootingCD = 8.f;
+}
+
+
+
 
 
 

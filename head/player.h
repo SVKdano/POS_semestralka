@@ -21,10 +21,16 @@ class Player {
         sf::Sprite sprite;
         sf::Texture texture;
 
+        sf::Vector2f dirBullet;
+        sf::Vector2f position;
+
         float speedOfMovement;
+        float shootingCD;
+        float shootingCDMax;
 
         void initTexture();
         void initSprite();
+        void initVariables();
 
     public:
         Player();
@@ -53,4 +59,10 @@ class Player {
         void movePlayer(const float dX, const float dY);
         void updatePlayer();
         void renderPlayer(sf::RenderTarget &renderTarget);
+        void updateCD();
+        const sf::Vector2f &getDirBullet() const;
+        const sf::Vector2f &getPosition() const;
+        void updateDirBullet();
+        const bool canShoot();
+
 };

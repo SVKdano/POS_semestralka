@@ -11,6 +11,7 @@
 class Game {
 private:
     std::map<std::string, sf::Texture*> textures;
+    std::vector<Bullet*> bullets;
 
     sf::RenderWindow* gWindow;
     Player playerClass;
@@ -27,7 +28,7 @@ public:
     virtual ~Game();
     void render();
     void processEvent(sf::Keyboard::Key key, bool checkPressed);
-    void rmBullets(std::vector<Bullet*> bullets);
+    void rmBullets(std::vector<Bullet*> &bullets);
 
     //news
     void runGame();
@@ -42,4 +43,5 @@ private:
     void initWindow();
     void initNewPlayer();
     void initTextures();
+
 };
