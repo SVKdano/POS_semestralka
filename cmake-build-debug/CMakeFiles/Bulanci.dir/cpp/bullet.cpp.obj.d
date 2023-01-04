@@ -1,9 +1,8 @@
-CMakeFiles/Bulanci.dir/main.cpp.obj: \
- C:\Users\Andrej\CLionProjects\POS_semestralka\main.cpp \
- C:\Users\Andrej\CLionProjects\POS_semestralka\head/game.h \
- C:/SFML/include/SFML/Graphics.hpp C:/SFML/include/SFML/Window.hpp \
- C:/SFML/include/SFML/System.hpp C:/SFML/include/SFML/Config.hpp \
- C:/SFML/include/SFML/System/Clock.hpp \
+CMakeFiles/Bulanci.dir/cpp/bullet.cpp.obj: \
+ C:\Users\Andrej\CLionProjects\POS_semestralka\cpp\bullet.cpp \
+ C:/Users/Andrej/CLionProjects/POS_semestralka/head/bullet.h \
+ C:/SFML/include/SFML/Window.hpp C:/SFML/include/SFML/System.hpp \
+ C:/SFML/include/SFML/Config.hpp C:/SFML/include/SFML/System/Clock.hpp \
  C:/SFML/include/SFML/System/Export.hpp \
  C:/SFML/include/SFML/System/Time.hpp C:/SFML/include/SFML/System/Err.hpp \
  C:/PROGRA~1/JETBRA~1/CLION2~1.4/bin/mingw/lib/gcc/x86_64-w64-mingw32/11.2.0/include/c++/ostream \
@@ -199,6 +198,7 @@ CMakeFiles/Bulanci.dir/main.cpp.obj: \
  C:/SFML/include/SFML/Window/Window.hpp \
  C:/SFML/include/SFML/Window/WindowHandle.hpp \
  C:/SFML/include/SFML/Window/WindowStyle.hpp \
+ C:/SFML/include/SFML/Graphics.hpp \
  C:/SFML/include/SFML/Graphics/BlendMode.hpp \
  C:/SFML/include/SFML/Graphics/Export.hpp \
  C:/SFML/include/SFML/Graphics/CircleShape.hpp \
@@ -235,9 +235,6 @@ CMakeFiles/Bulanci.dir/main.cpp.obj: \
  C:/SFML/include/SFML/Graphics/Sprite.hpp \
  C:/SFML/include/SFML/Graphics/Text.hpp \
  C:/SFML/include/SFML/Graphics/VertexBuffer.hpp \
- C:\Users\Andrej\CLionProjects\POS_semestralka\head/block.h \
- C:\Users\Andrej\CLionProjects\POS_semestralka\head/player.h \
- C:\Users\Andrej\CLionProjects\POS_semestralka\head/bullet.h \
  C:/SFML/include/SFML/Network.hpp C:/SFML/include/SFML/Network/Ftp.hpp \
  C:/SFML/include/SFML/Network/Export.hpp \
  C:/SFML/include/SFML/Network/TcpSocket.hpp \
