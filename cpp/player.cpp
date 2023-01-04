@@ -4,6 +4,10 @@
 #include "../head/player.h"
 
 Player::Player() {
+    this->speedOfMovement = 7.0f;
+
+    this->initTexture();
+    this->initSprite();
 }
 
 Player::~Player() {
@@ -76,6 +80,28 @@ void Player::move() {
         this->player.setTexture(&this->textures[3]);
     }
 }
+
+void Player::updatePlayer() {
+
+}
+
+void Player::renderPlayer(sf::RenderTarget &renderTarget) {
+    renderTarget.draw(this->sprite);
+}
+
+void Player::movePlayer(const float dX, const float dY) {
+    this->sprite.move(this->speedOfMovement * dX, this->speedOfMovement * dY);
+}
+
+void Player::initTexture() {
+    this->texture.loadFromFile("../imgs/BlueDown.png");
+}
+
+void Player::initSprite() {
+    this->sprite.setTexture(this->texture);
+}
+
+
 
 
 

@@ -3,6 +3,7 @@
 //
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include "bullet.h"
 
 class Player {
@@ -15,6 +16,15 @@ class Player {
         int size;
         int direction;
         bool alive = true;
+
+        //news
+        sf::Sprite sprite;
+        sf::Texture texture;
+
+        float speedOfMovement;
+
+        void initTexture();
+        void initSprite();
 
     public:
         Player();
@@ -38,4 +48,9 @@ class Player {
         void shoot();
 
         void move();
+
+        //news
+        void movePlayer(const float dX, const float dY);
+        void updatePlayer();
+        void renderPlayer(sf::RenderTarget &renderTarget);
 };

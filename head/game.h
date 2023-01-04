@@ -4,13 +4,14 @@
 
 
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "block.h"
 #include "player.h"
 
 class Game {
 private:
+    sf::RenderWindow* gWindow;
     Player playerClass;
+    Player* newPlayer;
     Block home;
     Block stone;
     bool up = false;
@@ -20,9 +21,19 @@ private:
     bool space = false;
 public:
     Game();
+    virtual ~Game();
     void render();
     void processEvent(sf::Keyboard::Key key, bool checkPressed);
     void rmBullets(std::vector<Bullet*> bullets);
+
+    //news
+    void runGame();
+
+    void updateWindow();
+    void renderWindow();
 private:
-    void setTextureOfMovement();
+    //news
+    void initWindow();
+    void initNewPlayer();
+
 };

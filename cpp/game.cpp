@@ -9,6 +9,13 @@
 #define TEXTURE_SIZE 100
 
 Game::Game() {
+    this->initWindow();
+    this->initNewPlayer();
+}
+
+Game::~Game() {
+    delete this->gWindow;
+    delete this->newPlayer;
 }
 
 void Game::render() {
@@ -134,3 +141,52 @@ void Game::rmBullets(std::vector<Bullet *> bullets) {
         }
     }
 }
+
+void Game::initWindow() {
+    this->gWindow = new sf::RenderWindow(
+            sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci"
+            );
+
+    this->gWindow->setFramerateLimit(60);
+    this->gWindow->setVerticalSyncEnabled(false);
+}
+
+void Game::updateWindow() {
+    sf::Event e;
+
+    while (this->gWindow->pollEvent(e)) {
+        if (e.type == sf::Event::Closed) {
+            this->gWindow->close();
+        }
+        if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Escape) {
+            this->gWindow->close();
+        }
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        this->newPlayer->movePlayer(-1.0f, 0.0f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        this->newPlayer->movePlayer(0.0f, -1.0f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        this->newPlayer->movePlayer(1.0f, 0.0f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        this->newPlayer->movePlayer(0.0f, 1.0f);
+}
+
+void Game::renderWindow() {
+    this->gWindow->clear();
+    this->newPlayer->renderPlayer(*this->gWindow);
+    this->gWindow->display();
+}
+
+void Game::runGame() {
+    while (this->gWindow->isOpen()) {
+        this->updateWindow();
+        this->renderWindow();
+    }
+}
+
+void Game::initNewPlayer() {
+    this->newPlayer = new Player();
+}
+
