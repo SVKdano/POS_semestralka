@@ -54,7 +54,8 @@ void Game::render() {
                     playerClassROne.move(7.0f,0.0f);
                 if (left)
                     playerClassROne.move(-7.0f,0.0f);
-
+                if (space)
+                    playerClass.shoot();
             }
 
             if (event.type == sf::Event::KeyReleased)
@@ -71,9 +72,10 @@ void Game::render() {
         window.draw(playerClassRTwo);
         window.draw(this->home.getBlock());
         window.draw(this->stone.getBlock());
-    }
-        for (auto &bullet : playerClass.getBullets()) {
+        for (auto &bullet : playerClass.getBullets())
+        {
             window.draw(bullet->getBullet());
+        }
         window.display();
     }
 }
