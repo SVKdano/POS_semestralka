@@ -49,18 +49,26 @@ void Game::render() {
                     playerClassROne.move(3.0f,0.0f);
                 if (left)
                     playerClassROne.move(-3.0f,0.0f);
-
+                if (space)
+                    playerClass.shoot();
             }
+
             if (event.type == sf::Event::KeyReleased)
             {
                 processEvent(event.key.code, false);
             }
         }
-
+        for (auto &bullet : playerClass.getBullets()) {
+            bullet->move();
+        }
+        rmBullets(playerClass.getBullets());
         window.clear();
         window.draw(playerClassROne);
         window.draw(playerClassRTwo);
         window.draw(this->block.getBlock());
+        for (auto &bullet : playerClass.getBullets()) {
+            window.draw(bullet->getBullet());
+        }
         window.display();
     }
 }
@@ -76,6 +84,8 @@ void Game::processEvent(sf::Keyboard::Key key, bool checkPressed) {
             down = true;
         if (key == sf::Keyboard::D)
             right = true;
+        if (key == sf::Keyboard::Space)
+            space = true;
     }
     if (!checkPressed)
     {
@@ -83,7 +93,20 @@ void Game::processEvent(sf::Keyboard::Key key, bool checkPressed) {
         down = false;
         right = false;
         left = false;
+        space = false;
     }
 
 }
 
+void Game::rmBullets(std::vector<Bullet *> bullets) {
+    if (!bullets.empty()) {
+        for (unsigned int i = 0; i < bullets.size(); i++) {
+            if (abs(bullets[i]->getPositionX() > 1300)) {
+                bullets.erase(bullets.begin() + (i++));
+            }
+            if (abs(bullets[i]->getPositionY() > 900)) {
+                bullets.erase(bullets.begin() + (i++));
+            }
+        }
+    }
+}

@@ -16,9 +16,11 @@ private:
     bool down;
     bool right;
     bool left;
+    bool space;
 public:
     Game();
     void render();
     void processEvent(sf::Keyboard::Key key, bool checkPressed);
     void update();
+    void rmBullets(std::vector<Bullet*> bullets);
 };
