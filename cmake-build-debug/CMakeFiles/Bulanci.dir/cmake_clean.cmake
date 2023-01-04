@@ -4,6 +4,8 @@ file(REMOVE_RECURSE
   "Bulanci.pdb"
   "CMakeFiles/Bulanci.dir/cpp/block.cpp.obj"
   "CMakeFiles/Bulanci.dir/cpp/block.cpp.obj.d"
+  "CMakeFiles/Bulanci.dir/cpp/bullet.cpp.obj"
+  "CMakeFiles/Bulanci.dir/cpp/bullet.cpp.obj.d"
   "CMakeFiles/Bulanci.dir/cpp/game.cpp.obj"
   "CMakeFiles/Bulanci.dir/cpp/game.cpp.obj.d"
   "CMakeFiles/Bulanci.dir/cpp/player.cpp.obj"
