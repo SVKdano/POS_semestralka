@@ -11,7 +11,8 @@
 class Game {
 private:
     Player playerClass;
-    Block block;
+    Block home;
+    Block stone;
     bool up;
     bool down;
     bool right;

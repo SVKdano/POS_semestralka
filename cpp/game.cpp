@@ -15,12 +15,16 @@ void Game::render() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
     sf::Vector2f movement;
 
-    sf::Texture texturePlayer[2];
-    texturePlayer[0].loadFromFile("../imgs/bulanek.png");
-    texturePlayer[1].loadFromFile("../imgs/bulanekEnemy.png");
+    sf::Texture texturePlayer[4];
+    texturePlayer[0].loadFromFile("../imgs/BlueDown.png");
+    texturePlayer[1].loadFromFile("../imgs/RedDown.png");
+    texturePlayer[2].loadFromFile("../imgs/home.png");
+    texturePlayer[3].loadFromFile("../imgs/stone.png");
 
     const sf::Texture *pTextureOne = &texturePlayer[0];
     const sf::Texture *pTextureTwo = &texturePlayer[1];
+    const sf::Texture *pTextureHome = &texturePlayer[2];
+    const sf::Texture *pTextureStone = &texturePlayer[3];
 
     sf::RectangleShape playerClassROne = this->playerClass
             .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureOne);
@@ -28,7 +32,8 @@ void Game::render() {
     sf::RectangleShape playerClassRTwo = this->playerClass
             .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureTwo);
 
-    this->block.generateBlock(200, 200, 300, 300, pTextureOne);
+    this->home.generateBlock(200, 200, 300, 300, pTextureHome);
+    this->stone.generateBlock(130,130,rand() % (WINDOW_X - 130), rand() % (WINDOW_Y - 130), pTextureStone);
 
     while (window.isOpen())
     {
@@ -42,13 +47,13 @@ void Game::render() {
                 processEvent(event.key.code, true);
 
                 if (up)
-                    playerClassROne.move(0.0f,-3.0f);
+                    playerClassROne.move(0.0f,-7.0f);
                 if (down)
-                    playerClassROne.move(0.0f,3.0f);
+                    playerClassROne.move(0.0f,7.0f);
                 if (right)
-                    playerClassROne.move(3.0f,0.0f);
+                    playerClassROne.move(7.0f,0.0f);
                 if (left)
-                    playerClassROne.move(-3.0f,0.0f);
+                    playerClassROne.move(-7.0f,0.0f);
                 if (space)
                     playerClass.shoot();
             }
@@ -65,8 +70,10 @@ void Game::render() {
         window.clear();
         window.draw(playerClassROne);
         window.draw(playerClassRTwo);
-        window.draw(this->block.getBlock());
-        for (auto &bullet : playerClass.getBullets()) {
+        window.draw(this->home.getBlock());
+        window.draw(this->stone.getBlock());
+        for (auto &bullet : playerClass.getBullets())
+        {
             window.draw(bullet->getBullet());
         }
         window.display();
