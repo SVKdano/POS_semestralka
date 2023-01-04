@@ -14,6 +14,7 @@ Game::Game() {
 void Game::render() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
     sf::Vector2f movement;
+    window.setFramerateLimit(60);
 
     sf::Texture movementTextures[4];
     movementTextures[0].loadFromFile("../imgs/BlueUp.png");
