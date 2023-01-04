@@ -38,7 +38,7 @@ void Player::setDirection(int direction) {
 
 void Player::shoot() {
     Bullet* bullet;
-    bullet = new Bullet(this->direction,this->getPlayer().getPosition().x,this->getPlayer().getPosition().y);
+    bullet = new Bullet(this->direction,this->getPlayer().getPosition().x + 50,this->getPlayer().getPosition().y + 50);
     this->bullets.push_back(bullet);
 }
 
