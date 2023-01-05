@@ -179,9 +179,15 @@ void Player::setPosition(const float posX, const float posY) {
     this->sprite.setPosition(posX, posY);
 }
 
+void Player::setPosition(const sf::Vector2f &position) {
+    this->sprite.setPosition(position);
+}
+
 const sf::FloatRect Player::getBounds() const {
     return this->sprite.getGlobalBounds();
 }
+
+
 
 
 

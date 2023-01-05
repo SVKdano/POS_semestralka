@@ -44,4 +44,7 @@ private:
     void initTextures();
     void initBlocks();
     void initMap();
+
+    sf::Vector3f getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
+    void resolve(const sf::Vector3f& manifold);
 };

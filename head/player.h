@@ -70,5 +70,7 @@ class Player {
 
         void setPosition(const float posX, const float posY);
 
+        void setPosition(const sf::Vector2f &position);
+
         const sf::FloatRect getBounds() const;
 };

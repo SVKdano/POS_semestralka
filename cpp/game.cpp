@@ -145,6 +145,27 @@ void Game::updateCollision() {
     } else if (this->newPlayer->getBounds().top + this->newPlayer->getBounds().height >= this->gWindow->getSize().y) {
         this->newPlayer->setPosition(this->newPlayer->getBounds().left, this->gWindow->getSize().y - this->newPlayer->getBounds().height);
     }
+
+    sf::FloatRect overlap; //holds overlap data, if any
+    sf::FloatRect playerBounds = this->newPlayer->getBounds();
+
+    if (stone1->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = stone1->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    } else if (stone2->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = stone2->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    } else if (stone3->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = stone3->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    } else if (home->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = home->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    }
 }
 
 void Game::updateWindow() {
@@ -205,6 +226,28 @@ void Game::updateBullets() {
         ++counter;
     }
 
+}
+
+sf::Vector3f Game::getManifold(const sf::FloatRect &overlap, const sf::Vector2f &collisionNormal) {
+    sf::Vector3f manifold;
+
+    if (overlap.width < overlap.height)
+    {
+        manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
+        manifold.z = overlap.width;
+    }
+    else
+    {
+        manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
+        manifold.z = overlap.height;
+    }
+
+    return manifold;
+}
+
+void Game::resolve(const sf::Vector3f &manifold) {
+    sf::Vector2f normal(manifold.x, manifold.y);
+    this->newPlayer->setPosition(this->newPlayer->getPosition() + (normal * manifold.z));
 }
 
 

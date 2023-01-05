@@ -20,3 +20,7 @@ void Block::renderBlock(sf::RenderTarget *renderTarget) {
 const sf::FloatRect Block::getBounds() const {
     return this->sprite.getGlobalBounds();
 }
+
+const sf::Vector2f &Block::getPosition() const {
+    return this->sprite.getPosition();
+}

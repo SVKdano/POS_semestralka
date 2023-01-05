@@ -17,7 +17,7 @@ public:
 
     virtual ~Block();
 
-    const sf::RectangleShape& getBlock() const;
+    const sf::Vector2f &getPosition() const;
 
     void renderBlock(sf::RenderTarget *renderTarget);
 
