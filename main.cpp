@@ -4,7 +4,8 @@
 
 int main()
 {
-    Game* game = new Game();
-    game->render();
+    Game game;
+    game.runGame();
+    //game->render();
     return 0;
 }

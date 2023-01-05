@@ -3,6 +3,7 @@
 //
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include "bullet.h"
 
 class Player {
@@ -10,20 +11,30 @@ class Player {
         sf::RectangleShape player;
         std::vector<Bullet*> bullets;
         const sf::Texture* textures;
-        int x;
-        int y;
-        int size;
-        int direction;
-        bool alive = true;
+        int direction = 2;
+        int lives = 3;
+
+        sf::Sprite sprite;
+        sf::Texture texture;
+
+        sf::Vector2f dirBullet;
+        sf::Vector2f bulletPosition;
+        sf::Vector2f position;
+
+        float speedOfMovement;
+        float shootingCD;
+        float shootingCDMax;
+
+        bool blue = true;
+
+        void initTexture();
+        void initSprite();
+        void initVariables();
 
     public:
-        Player();
+        Player(bool isBlue);
 
         virtual ~Player();
-
-        sf::RectangleShape generatePlayer(int windowX, int windowY, int playerSize, const sf::Texture pTextures[]);
-
-        const sf::RectangleShape &getPlayer() const;
 
         int getDirection() const;
 
@@ -31,11 +42,28 @@ class Player {
 
         const std::vector<Bullet *> &getBullets() const;
 
-        bool isAlive() const;
+        void movePlayer(const float dX, const float dY);
+        void updatePlayer();
+        void renderPlayer(sf::RenderTarget &renderTarget);
 
-        void setAlive(bool alive);
+        const sf::Vector2f &getDirBullet() const;
+        const sf::Vector2f &getPosition() const;
 
-        void shoot();
+        void updateCD();
+        void updateDirBullet();
+        const bool canShoot();
+        const sf::Vector2f &getBulletPosition() const;
 
-        void move();
+        void updateBulletPosition();
+        void updateTexture(sf::Keyboard::Key key);
+
+        void setPosition(const float posX, const float posY);
+        void setPosition(const sf::Vector2f &position);
+
+        const sf::FloatRect getBounds() const;
+
+        void respawn();
+        int getLives();
+        void setLives(int lives);
+        void setSpeedOfMovement(int speed);
 };

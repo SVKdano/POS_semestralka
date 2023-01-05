@@ -4,36 +4,23 @@
 
 #include "../head/block.h"
 
-Block::Block() {
-    generateBlock(0, 0, 0, 0, nullptr);
+Block::Block(sf::Texture* texture, float posX, float posY) {
+    this->sprite.setTexture(*texture);
+    this->sprite.setPosition(posX, posY);
 }
 
 Block::~Block() {
 
 }
 
-void Block::generateBlock(int x, int y, int xP, int yP, const sf::Texture* texture) {
-    this->block.setSize(sf::Vector2f(x, y));
-    this->block.setPosition(xP, yP);
-    this->block.setTexture(texture);
+void Block::renderBlock(sf::RenderTarget *renderTarget) {
+    renderTarget->draw(this->sprite);
 }
 
-const sf::RectangleShape &Block::getBlock() const {
-    return this->block;
+const sf::FloatRect Block::getBounds() const {
+    return this->sprite.getGlobalBounds();
 }
 
-int Block::getX() const {
-    return this->x;
-}
-
-void Block::setX(int newX) {
-    this->x = newX;
-}
-
-int Block::getY() const {
-    return this->y;
-}
-
-void Block::setY(int newY) {
-    this->y = newY;
+const sf::Vector2f &Block::getPosition() const {
+    return this->sprite.getPosition();
 }

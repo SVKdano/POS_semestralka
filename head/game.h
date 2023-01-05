@@ -4,25 +4,47 @@
 
 
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "block.h"
 #include "player.h"
+#include <map>
 
 class Game {
 private:
-    Player playerClass;
-    Block home;
-    Block stone;
-    bool up = false;
-    bool down = false;
-    bool right = false;
-    bool left = false;
-    bool space = false;
+    std::map<std::string, sf::Texture*> textures;
+    std::vector<Bullet*> bullets;
+
+    sf::RenderWindow* gWindow;
+    sf::Texture backroundTexture;
+    sf::Sprite mapBackround;
+
+    Player* newPlayer;
+    Player* mockedEnemyPlayer;
+
+    Block* home;
+    Block* stone1;
+    Block* stone2;
+    Block* stone3;
+
 public:
     Game();
-    void render();
-    void processEvent(sf::Keyboard::Key key, bool checkPressed);
-    void rmBullets(std::vector<Bullet*> bullets);
+    virtual ~Game();
+
+    void runGame();
+    void renderWindow();
+    void renderMap();
+
+    void updateEvents();
+    void updateControls();
+    void updateWindow();
+    void updateBullets();
+    void updateCollision();
 private:
-    void setTextureOfMovement();
+    void initWindow();
+    void initNewPlayer();
+    void initTextures();
+    void initBlocks();
+    void initMap();
+
+    sf::Vector3f getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
+    void resolve(const sf::Vector3f& manifold);
 };

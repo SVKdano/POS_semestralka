@@ -6,130 +6,270 @@
 
 #define WINDOW_X  1200
 #define WINDOW_Y  800
-#define TEXTURE_SIZE 100
 
 Game::Game() {
+    this->initWindow();
+    this->initMap();
+    this->initTextures();
+    this->initBlocks();
+    this->initNewPlayer();
 }
 
-void Game::render() {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci");
-    sf::Vector2f movement;
+Game::~Game() {
+    delete this->gWindow;
+    delete this->newPlayer;
+    delete this->mockedEnemyPlayer;
 
-    sf::Texture movementTextures[4];
-    movementTextures[0].loadFromFile("../imgs/BlueUp.png");
-    movementTextures[1].loadFromFile("../imgs/BlueRight.png");
-    movementTextures[2].loadFromFile("../imgs/BlueDown.png");
-    movementTextures[3].loadFromFile("../imgs/BlueLeft.png");
+    delete this->home;
+    delete this->stone1;
+    delete this->stone2;
+    delete this->stone3;
+
+    for (auto &x : this->textures) {
+        delete x.second;
+    }
+
+    for (auto *bullet : this->bullets) {
+        delete bullet;
+    }
+}
+
+void Game::runGame() {
+    while (this->gWindow->isOpen()) {
+        this->updateWindow();
+        this->renderWindow();
+    }
+}
+
+void Game::initWindow() {
+    this->gWindow = new sf::RenderWindow(
+            sf::VideoMode(WINDOW_X, WINDOW_Y), "Bulanci"
+            );
+
+    this->gWindow->setFramerateLimit(60);
+    this->gWindow->setVerticalSyncEnabled(false);
+}
+
+void Game::initNewPlayer() {
+    this->newPlayer = new Player(true);
+    this->mockedEnemyPlayer = new Player(false);
+}
+
+void Game::initTextures() {
+    this->textures["BULLET"] = new sf::Texture();
+    this->textures["BULLET"]->loadFromFile("../imgs/strela.png");
+    this->textures["STONE"] = new sf::Texture();
+    this->textures["STONE"]->loadFromFile("../imgs/stone.png");
+    this->textures["HOME"] = new sf::Texture();
+    this->textures["HOME"]->loadFromFile("../imgs/home.png");
+}
+
+void Game::initBlocks() {
+    this->home = new Block(textures["HOME"], 420, 100);
+    this->stone1 = new Block(textures["STONE"], 210, 300);
+    this->stone2 = new Block(textures["STONE"], 500, 640);
+    this->stone3 = new Block(textures["STONE"], 920, 350);
+}
+
+void Game::initMap() {
+    this->backroundTexture.loadFromFile("../imgs/mapa.png");
+    this->mapBackround.setTexture(this->backroundTexture);
+}
 
 
-    sf::Texture texturePlayer[3];
-    texturePlayer[0].loadFromFile("../imgs/RedDown.png");
-    texturePlayer[1].loadFromFile("../imgs/home.png");
-    texturePlayer[2].loadFromFile("../imgs/stone.png");
+void Game::renderMap() {
+    this->gWindow->draw(this->mapBackround);
+}
 
-    const sf::Texture *pTextureTwo = &texturePlayer[0];
-    const sf::Texture *pTextureHome = &texturePlayer[1];
-    const sf::Texture *pTextureStone = &texturePlayer[2];
+void Game::renderWindow() {
+    this->gWindow->clear();
+    this->renderMap();
+    this->newPlayer->renderPlayer(*this->gWindow);
+    this->mockedEnemyPlayer->renderPlayer(*this->gWindow);
+    this->home->renderBlock(this->gWindow);
+    this->stone1->renderBlock(this->gWindow);
+    this->stone2->renderBlock(this->gWindow);
+    this->stone3->renderBlock(this->gWindow);
+    for(auto *bullet : this->bullets) {
+        bullet->render(this->gWindow);
+    }
+    this->gWindow->display();
+}
 
-    sf::RectangleShape playerClassRTwo = this->playerClass
-            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,pTextureTwo);
-    this->playerClass
-            .generatePlayer(WINDOW_X,WINDOW_Y,TEXTURE_SIZE,movementTextures);
+void Game::updateEvents() {
+    sf::Event e;
 
-    this->home.generateBlock(200, 200, 300, 300, pTextureHome);
-    this->stone.generateBlock(130,130,rand() % (WINDOW_X - 130), rand() % (WINDOW_Y - 130), pTextureStone);
+    while (this->gWindow->pollEvent(e)) {
+        if (e.type == sf::Event::Closed) {
+            this->gWindow->close();
+        }
+        if (e.type == sf::Event::KeyPressed && e.key.code == sf::Keyboard::Escape) {
+            this->gWindow->close();
+        }
+    }
+}
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
+void Game::updateControls() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+        this->newPlayer->movePlayer(-1.0f, 0.0f);
+        this->newPlayer->updateTexture(sf::Keyboard::A);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+        this->newPlayer->movePlayer(0.0f, -1.0f);
+        this->newPlayer->updateTexture(sf::Keyboard::W);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+        this->newPlayer->movePlayer(1.0f, 0.0f);
+        this->newPlayer->updateTexture(sf::Keyboard::D);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+        this->newPlayer->movePlayer(0.0f, 1.0f);
+        this->newPlayer->updateTexture(sf::Keyboard::S);
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->newPlayer->canShoot()) {
+        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->newPlayer->getBulletPosition().x,
+                                           this->newPlayer->getBulletPosition().y, this->newPlayer->getDirBullet().x,
+                                           this->newPlayer->getDirBullet().y, 15.f));
+    }
+}
+
+void Game::updateCollision() {
+    if (this->newPlayer->getBounds().left < 0.f) {
+        this->newPlayer->setPosition(0.f, this->newPlayer->getBounds().top);
+    } else if (this->newPlayer->getBounds().left + this->newPlayer->getBounds().width >= this->gWindow->getSize().x) {
+        this->newPlayer->setPosition(this->gWindow->getSize().x - this->newPlayer->getBounds().width, this->newPlayer->getBounds().top);
+    }
+
+    if (this->newPlayer->getBounds().top < 0.f) {
+        this->newPlayer->setPosition(this->newPlayer->getBounds().left, 0.f);
+    } else if (this->newPlayer->getBounds().top + this->newPlayer->getBounds().height >= this->gWindow->getSize().y) {
+        this->newPlayer->setPosition(this->newPlayer->getBounds().left, this->gWindow->getSize().y - this->newPlayer->getBounds().height);
+    }
+
+    sf::FloatRect overlap;
+    sf::FloatRect playerBounds = this->newPlayer->getBounds();
+
+    if (stone1->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = stone1->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    } else if (stone2->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = stone2->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    } else if (stone3->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = stone3->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    } else if (home->getBounds().intersects(playerBounds, overlap)) {
+        auto collisionNormal = home->getPosition() - this->newPlayer->getPosition();
+        auto manifold = getManifold(overlap, collisionNormal);
+        this->resolve(manifold);
+    }
+}
+
+void Game::updateWindow() {
+    this->updateEvents();
+
+    this->updateControls();
+
+    this->newPlayer->updatePlayer();
+
+    this->updateCollision();
+
+    this->updateBullets();
+}
+
+
+void Game::updateBullets() {
+    unsigned counter = 0;
+    for(auto *bullet : this->bullets) {
+        bullet->update();
+        if (bullet->getBounds().top + bullet->getBounds().height < 0.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << "\n";
+        }else if (bullet->getBounds().left + bullet->getBounds().width < 0.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << "\n";
+        } else if (bullet->getBounds().left + bullet->getBounds().width > 1200.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << "\n";
+        } else if (bullet->getBounds().top + bullet->getBounds().height > 800.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << "\n";
+        } else if (bullet->getBounds().intersects(this->mockedEnemyPlayer->getBounds()))
         {
-            if (event.type == sf::Event::Closed)
-                window.close();
-            if (event.type == sf::Event::KeyPressed)
-            {
-                processEvent(event.key.code, true);
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << "Shoot that G" << " bullets size: " << this->bullets.size() << std::endl;
 
-                if (up) {
-                    this->playerClass.setDirection(0);
-                    this->playerClass.move();
-                }
-                if (down) {
-                    this->playerClass.setDirection(2);
-                    this->playerClass.move();
-                }
-                if (right) {
-                    this->playerClass.setDirection(1);
-                    this->playerClass.move();
-                }
-                if (left) {
-                    this->playerClass.setDirection(3);
-                    this->playerClass.move();
-                }
-                if (space){
-                    playerClass.shoot();
-                }
-                if (event.key.code == sf::Keyboard::Escape)
-                    window.close();
+            int acutalLives = this->mockedEnemyPlayer->getLives();
+            this->mockedEnemyPlayer->setLives( acutalLives - 1);
+
+            if (this->mockedEnemyPlayer->getLives() > 0 ) {
+                this->mockedEnemyPlayer->respawn();
+                this->newPlayer->respawn();
+                std::cout << "Actual lives remaining " << this->mockedEnemyPlayer->getLives() << std::endl;
+            } else {
+                this->mockedEnemyPlayer->respawn();
+                this->mockedEnemyPlayer->setSpeedOfMovement(0);
+                this->newPlayer->respawn();
+                this->newPlayer->setSpeedOfMovement(0);
             }
 
-            if (event.type == sf::Event::KeyReleased)
-            {
-                processEvent(event.key.code, false);
-            }
-        }
-        for (auto &bullet : playerClass.getBullets()) {
-            bullet->move();
-        }
-        rmBullets(playerClass.getBullets());
-        window.clear();
-        window.draw(playerClassRTwo);
-        window.draw(playerClass.getPlayer());
-        window.draw(this->home.getBlock());
-        window.draw(this->stone.getBlock());
-        for (auto &bullet : playerClass.getBullets())
+        } else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
+                    bullet->getBounds().intersects(this->stone2->getBounds()) ||
+                    bullet->getBounds().intersects(this->stone3->getBounds()) ||
+                    bullet->getBounds().intersects(this->home->getBounds())
+                    )
         {
-            window.draw(bullet->getBullet());
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << std::endl;
         }
-        window.display();
+        ++counter;
     }
 
 }
 
-void Game::processEvent(sf::Keyboard::Key key, bool checkPressed) {
-    if (checkPressed)
-    {
-        if (key == sf::Keyboard::W)
-            up = true;
-        if (key == sf::Keyboard::A)
-            left = true;
-        if (key == sf::Keyboard::S)
-            down = true;
-        if (key == sf::Keyboard::D)
-            right = true;
-        if (key == sf::Keyboard::Space)
-            space = true;
+sf::Vector3f Game::getManifold(const sf::FloatRect &overlap, const sf::Vector2f &collisionNormal) {
+    sf::Vector3f manifold;
+
+    if (overlap.width < overlap.height) {
+        manifold.x = (collisionNormal.x < 0) ? 1.f : -1.f;
+        manifold.z = overlap.width;
     }
-    if (!checkPressed)
-    {
-        up = false;
-        down = false;
-        right = false;
-        left = false;
-        space = false;
+    else {
+        manifold.y = (collisionNormal.y < 0) ? 1.f : -1.f;
+        manifold.z = overlap.height;
     }
 
+    return manifold;
 }
 
-void Game::rmBullets(std::vector<Bullet *> bullets) {
-    if (!bullets.empty()) {
-        for (unsigned int i = 0; i < bullets.size(); i++) {
-            if (abs(bullets[i]->getPositionX()) > 1200) {
-                bullets.erase(bullets.begin() + (i++));
-            }
-            else if (abs(bullets[i]->getPositionY()) > 800) {
-                bullets.erase(bullets.begin() + (i++));
-            }
-        }
-    }
+void Game::resolve(const sf::Vector3f &manifold) {
+    sf::Vector2f normal(manifold.x, manifold.y);
+    this->newPlayer->setPosition(this->newPlayer->getPosition() + (normal * manifold.z));
 }
+
+
+
+
+
+
+
+
+
+
+
+
