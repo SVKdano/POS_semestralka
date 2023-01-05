@@ -9,6 +9,7 @@
 
 Game::Game() {
     this->initWindow();
+    this->initMap();
     this->initTextures();
     this->initBlocks();
     this->initNewPlayer();
@@ -18,6 +19,11 @@ Game::~Game() {
     delete this->gWindow;
     delete this->newPlayer;
     delete this->mockedEnemyPlayer;
+
+    delete this->home;
+    delete this->stone1;
+    delete this->stone2;
+    delete this->stone3;
 
     for (auto &x : this->textures) {
         delete x.second;
@@ -60,13 +66,24 @@ void Game::initTextures() {
 
 void Game::initBlocks() {
     this->home = new Block(textures["HOME"], 420, 100);
-    this->stone1 = new Block(textures["STONE"], 250, 500);
-    this->stone2 = new Block(textures["STONE"], 500, 380);
-    this->stone3 = new Block(textures["STONE"], 850, 530);
+    this->stone1 = new Block(textures["STONE"], 210, 300);
+    this->stone2 = new Block(textures["STONE"], 500, 640);
+    this->stone3 = new Block(textures["STONE"], 920, 350);
+}
+
+void Game::initMap() {
+    this->backroundTexture.loadFromFile("../imgs/mapa.png");
+    this->mapBackround.setTexture(this->backroundTexture);
+}
+
+
+void Game::renderMap() {
+    this->gWindow->draw(this->mapBackround);
 }
 
 void Game::renderWindow() {
     this->gWindow->clear();
+    this->renderMap();
     this->newPlayer->renderPlayer(*this->gWindow);
     this->mockedEnemyPlayer->renderPlayer(*this->gWindow);
     this->home->renderBlock(this->gWindow);
@@ -173,7 +190,7 @@ void Game::updateBullets() {
             delete this->bullets.at(counter);
             this->bullets.erase(bullets.begin() + counter);
             --counter;
-            std::cout << "Shoot that G" << std::endl;
+            std::cout << "Shoot that G" << " bullets size: " << this->bullets.size() << std::endl;
         } else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
                     bullet->getBounds().intersects(this->stone2->getBounds()) ||
                     bullet->getBounds().intersects(this->stone3->getBounds()) ||
@@ -183,11 +200,15 @@ void Game::updateBullets() {
             delete this->bullets.at(counter);
             this->bullets.erase(bullets.begin() + counter);
             --counter;
+            std::cout << this->bullets.size() << std::endl;
         }
         ++counter;
     }
 
 }
+
+
+
 
 
 

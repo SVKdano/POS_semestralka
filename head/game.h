@@ -14,8 +14,12 @@ private:
     std::vector<Bullet*> bullets;
 
     sf::RenderWindow* gWindow;
+    sf::Texture backroundTexture;
+    sf::Sprite mapBackround;
+
     Player* newPlayer;
     Player* mockedEnemyPlayer;
+
     Block* home;
     Block* stone1;
     Block* stone2;
@@ -27,6 +31,7 @@ public:
 
     void runGame();
     void renderWindow();
+    void renderMap();
 
     void updateEvents();
     void updateControls();
@@ -38,4 +43,5 @@ private:
     void initNewPlayer();
     void initTextures();
     void initBlocks();
+    void initMap();
 };
