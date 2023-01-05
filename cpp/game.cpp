@@ -117,8 +117,21 @@ void Game::updateBullets() {
             delete this->bullets.at(counter);
             this->bullets.erase(bullets.begin() + counter);
             --counter;
-
-            //TODO: do not forget to delete this cout
+            std::cout << this->bullets.size() << "\n";
+        }else if (bullet->getBounds().left + bullet->getBounds().width < 0.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << "\n";
+        } else if (bullet->getBounds().left + bullet->getBounds().width > 1200.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << this->bullets.size() << "\n";
+        } else if (bullet->getBounds().top + bullet->getBounds().height > 800.f) {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
             std::cout << this->bullets.size() << "\n";
         }
         ++counter;
