@@ -18,12 +18,15 @@ private:
     sf::Sprite mapBackround;
 
     Player* newPlayer;
-    Player* mockedEnemyPlayer;
+    Player* enemyPlayer;
 
     Block* home;
     Block* stone1;
     Block* stone2;
     Block* stone3;
+
+    int connection;
+    sf::TcpSocket socket;
 
 public:
     Game();
@@ -44,6 +47,7 @@ private:
     void initTextures();
     void initBlocks();
     void initMap();
+    void initConnection();
 
     sf::Vector3f getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
     void resolve(const sf::Vector3f& manifold);

@@ -8,6 +8,7 @@
 #define WINDOW_Y  800
 
 Game::Game() {
+    this->initConnection();
     this->initWindow();
     this->initMap();
     this->initTextures();
@@ -18,7 +19,7 @@ Game::Game() {
 Game::~Game() {
     delete this->gWindow;
     delete this->newPlayer;
-    delete this->mockedEnemyPlayer;
+    delete this->enemyPlayer;
 
     delete this->home;
     delete this->stone1;
@@ -52,7 +53,7 @@ void Game::initWindow() {
 
 void Game::initNewPlayer() {
     this->newPlayer = new Player(true);
-    this->mockedEnemyPlayer = new Player(false);
+    this->enemyPlayer = new Player(false);
 }
 
 void Game::initTextures() {
@@ -76,6 +77,25 @@ void Game::initMap() {
     this->mapBackround.setTexture(this->backroundTexture);
 }
 
+void Game::initConnection() {
+    std::cin >> this->connection;
+
+    if (this->connection == 1) {
+        sf::TcpListener listener;
+        listener.listen(2023);
+        listener.accept(this->socket);
+    } else {
+        sf::IpAddress iP;
+        std::cout << "Write server IP address." << std::endl;
+        std::cin >> iP;
+        if(!socket.connect(iP,2023)) {
+            std::cout << "Connection successful." << std::endl;
+        } else {
+            std::cout << "Failed to connect." << std::endl;
+        }
+    }
+}
+
 
 void Game::renderMap() {
     this->gWindow->draw(this->mapBackround);
@@ -85,7 +105,7 @@ void Game::renderWindow() {
     this->gWindow->clear();
     this->renderMap();
     this->newPlayer->renderPlayer(*this->gWindow);
-    this->mockedEnemyPlayer->renderPlayer(*this->gWindow);
+    this->enemyPlayer->renderPlayer(*this->gWindow);
     this->home->renderBlock(this->gWindow);
     this->stone1->renderBlock(this->gWindow);
     this->stone2->renderBlock(this->gWindow);
@@ -171,13 +191,39 @@ void Game::updateCollision() {
 void Game::updateWindow() {
     this->updateEvents();
 
-    this->updateControls();
+    if (this->newPlayer->getLives() > 0 && this->enemyPlayer->getLives() > 0) {
+        sf::Vector2f prevPos, enemyPos;
+        int  prevLife1, prevLife2, life1, life2, enemyDir;
 
-    this->newPlayer->updatePlayer();
+        sf::Packet packetMovement;
+        prevPos = this->newPlayer->getPosition();
 
-    this->updateCollision();
+        this->updateControls();
 
-    this->updateBullets();
+        this->newPlayer->updatePlayer();
+
+        this->updateCollision();
+
+        this->updateBullets();
+
+        if (this->newPlayer->getPosition() != prevPos) {
+            packetMovement << this->newPlayer->getPosition().x << this->newPlayer->getPosition().y
+                           << this->newPlayer->getDirection();
+            this->socket.send(packetMovement);
+        }
+
+        this->socket.receive(packetMovement);
+
+        if (packetMovement >> enemyPos.x >> enemyPos.y >> enemyDir) {
+            if (this->newPlayer->getDirection() != enemyDir) {
+                this->enemyPlayer->setDirection(enemyDir);
+            }
+            this->enemyPlayer->setPosition(enemyPos);
+        }
+
+
+    }
+
 }
 
 
@@ -205,23 +251,20 @@ void Game::updateBullets() {
             this->bullets.erase(bullets.begin() + counter);
             --counter;
             std::cout << this->bullets.size() << "\n";
-        } else if (bullet->getBounds().intersects(this->mockedEnemyPlayer->getBounds()))
-        {
+        } else if (bullet->getBounds().intersects(this->newPlayer->getBounds())) {
             delete this->bullets.at(counter);
             this->bullets.erase(bullets.begin() + counter);
             --counter;
-            std::cout << "Shoot that G" << " bullets size: " << this->bullets.size() << std::endl;
 
-            int acutalLives = this->mockedEnemyPlayer->getLives();
-            this->mockedEnemyPlayer->setLives( acutalLives - 1);
+            int acutalLives = this->newPlayer->getLives();
+            this->newPlayer->setLives(acutalLives - 1);
 
-            if (this->mockedEnemyPlayer->getLives() > 0 ) {
-                this->mockedEnemyPlayer->respawn();
+            if (this->newPlayer->getLives() > 0 ) {
+                this->enemyPlayer->respawn();
                 this->newPlayer->respawn();
-                std::cout << "Actual lives remaining " << this->mockedEnemyPlayer->getLives() << std::endl;
             } else {
-                this->mockedEnemyPlayer->respawn();
-                this->mockedEnemyPlayer->setSpeedOfMovement(0);
+                this->enemyPlayer->respawn();
+                this->enemyPlayer->setSpeedOfMovement(0);
                 this->newPlayer->respawn();
                 this->newPlayer->setSpeedOfMovement(0);
             }
@@ -261,6 +304,8 @@ void Game::resolve(const sf::Vector3f &manifold) {
     sf::Vector2f normal(manifold.x, manifold.y);
     this->newPlayer->setPosition(this->newPlayer->getPosition() + (normal * manifold.z));
 }
+
+
 
 
 
