@@ -91,8 +91,8 @@ void Game::updateControls() {
         this->newPlayer->updateTexture(sf::Keyboard::S);
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->newPlayer->canShoot()) {
-        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->newPlayer->getPosition().x,
-                                           this->newPlayer->getPosition().y, this->newPlayer->getDirBullet().x,
+        this->bullets.push_back(new Bullet(this->textures["BULLET"], this->newPlayer->getBulletPosition().x,
+                                           this->newPlayer->getBulletPosition().y, this->newPlayer->getDirBullet().x,
                                            this->newPlayer->getDirBullet().y, 15.f));
     }
 

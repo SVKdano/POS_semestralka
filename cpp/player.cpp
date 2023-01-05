@@ -29,6 +29,8 @@ void Player::initVariables() {
     this->dirBullet.y = -1.f;
     this->shootingCDMax = 10.f;
     this->shootingCD = 8.f;
+    this->bulletPosition.x = this->position.x + 50.f;
+    this->bulletPosition.y = this->position.y - 6.f;
 }
 
 void Player::renderPlayer(sf::RenderTarget &renderTarget) {
@@ -85,6 +87,7 @@ void Player::movePlayer(const float dX, const float dY) {
 
 void Player::updatePlayer() {
     this->updateDirBullet();
+    updateBulletPosition();
     this->updateCD();
 }
 
@@ -127,6 +130,26 @@ void Player::updateTexture(sf::Keyboard::Key key) {
         this->direction = 3;
         this->texture.loadFromFile("../imgs/BlueLeft.png");
     }
+}
+
+void Player::updateBulletPosition() {
+    if (this->direction == 0) {
+        this->bulletPosition.x = this->sprite.getPosition().x + 50.f;
+        this->bulletPosition.y = this->sprite.getPosition().y - 6.f;
+    } else if (this->direction == 1) {
+        this->bulletPosition.x = this->sprite.getPosition().x + 106.f;
+        this->bulletPosition.y = this->sprite.getPosition().y + 50.f;
+    } else if (this->direction == 2) {
+        this->bulletPosition.x = this->sprite.getPosition().x + 50.f;
+        this->bulletPosition.y = this->sprite.getPosition().y + 106.f;
+    } else {
+        this->bulletPosition.x = this->sprite.getPosition().x - 6.f;
+        this->bulletPosition.y = this->sprite.getPosition().y + 50.f;
+    }
+}
+
+const sf::Vector2f &Player::getBulletPosition() const {
+    return bulletPosition;
 }
 
 

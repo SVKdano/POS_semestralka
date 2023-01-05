@@ -22,6 +22,7 @@ class Player {
         sf::Texture texture;
 
         sf::Vector2f dirBullet;
+        sf::Vector2f bulletPosition;
         sf::Vector2f position;
 
         float speedOfMovement;
@@ -60,4 +61,6 @@ class Player {
         void updateDirBullet();
         const bool canShoot();
         void updateTexture(sf::Keyboard::Key key);
+        void updateBulletPosition();
+        const sf::Vector2f &getBulletPosition() const;
 };
