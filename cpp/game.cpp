@@ -212,6 +212,21 @@ void Game::updateBullets() {
             this->bullets.erase(bullets.begin() + counter);
             --counter;
             std::cout << "Shoot that G" << " bullets size: " << this->bullets.size() << std::endl;
+
+            int acutalLives = this->mockedEnemyPlayer->getLives();
+            this->mockedEnemyPlayer->setLives( acutalLives - 1);
+
+            if (this->mockedEnemyPlayer->getLives() > 0 ) {
+                this->mockedEnemyPlayer->respawn();
+                this->newPlayer->respawn();
+                std::cout << "Actual lives remaining " << this->mockedEnemyPlayer->getLives() << std::endl;
+            } else {
+                this->mockedEnemyPlayer->respawn();
+                this->mockedEnemyPlayer->setSpeedOfMovement(0);
+                this->newPlayer->respawn();
+                this->newPlayer->setSpeedOfMovement(0);
+            }
+
         } else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
                     bullet->getBounds().intersects(this->stone2->getBounds()) ||
                     bullet->getBounds().intersects(this->stone3->getBounds()) ||

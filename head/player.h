@@ -14,8 +14,8 @@ class Player {
         int x;
         int y;
         int size;
-        int direction;
-        bool alive = true;
+        int direction = 2;
+        int lives = 3;
 
         //news
         sf::Sprite sprite;
@@ -48,10 +48,6 @@ class Player {
 
         const std::vector<Bullet *> &getBullets() const;
 
-        bool isAlive() const;
-
-        void setAlive(bool alive);
-
         void shoot(std::map<std::string, sf::Texture*> textures);
 
         void movePlayer(const float dX, const float dY);
@@ -64,13 +60,18 @@ class Player {
         void updateCD();
         void updateDirBullet();
         const bool canShoot();
-        void updateTexture(sf::Keyboard::Key key);
-        void updateBulletPosition();
         const sf::Vector2f &getBulletPosition() const;
 
-        void setPosition(const float posX, const float posY);
+        void updateBulletPosition();
+        void updateTexture(sf::Keyboard::Key key);
 
+        void setPosition(const float posX, const float posY);
         void setPosition(const sf::Vector2f &position);
 
         const sf::FloatRect getBounds() const;
+
+        void respawn();
+        int getLives();
+        void setLives(int lives);
+        void setSpeedOfMovement(int speed);
 };

@@ -2,6 +2,7 @@
 // Created by Daniel Lieskovský on 3. 1. 2023.
 //
 #include "../head/player.h"
+#include <unistd.h>
 
 Player::Player(bool isBlue) {
     this->blue = isBlue;
@@ -24,7 +25,11 @@ void Player::initTexture() {
 }
 
 void Player::initSprite() {
-    this->sprite.setPosition((rand() % (1200-100)), (rand() % (800-100)));
+    if (blue) {
+        this->sprite.setPosition(100, (rand() % (800 - 100)));
+    } else {
+        this->sprite.setPosition(1050, (rand() % (800 - 100)));
+    }
     this->sprite.setTexture(this->texture);
 }
 
@@ -70,13 +75,6 @@ int Player::getDirection() const {
     return direction;
 }
 
-bool Player::isAlive() const {
-    return alive;
-}
-
-void Player::setAlive(bool alive) {
-    Player::alive = alive;
-}
 
 void Player::setDirection(int direction) {
     Player::direction = direction;
@@ -88,6 +86,27 @@ void Player::shoot(std::map<std::string, sf::Texture*> textures) {
 
 void Player::movePlayer(const float dX, const float dY) {
     this->sprite.move(this->speedOfMovement * dX, this->speedOfMovement * dY);
+}
+
+void Player::respawn() {
+    if (this->blue) {
+        this->sprite.setPosition(100, ((rand() % 600) + 100));
+        this->texture.loadFromFile("../imgs/BlueDown.png");
+        this->sprite.setTexture(this->texture);
+        if (this->lives <= 0 ) {
+            this->texture.loadFromFile("../imgs/BlueDead.png");
+        }
+
+    } else
+    {
+        this->sprite.setPosition(1050, ((rand() % 600) + 100));
+        this->texture.loadFromFile("../imgs/RedDown.png");
+        this->sprite.setTexture(this->texture);
+        if (this->lives <= 0 ) {
+            this->texture.loadFromFile("../imgs/RedDead.png");
+        }
+    }
+    this->direction = 2;
 }
 
 void Player::updatePlayer() {
@@ -186,6 +205,19 @@ void Player::setPosition(const sf::Vector2f &position) {
 const sf::FloatRect Player::getBounds() const {
     return this->sprite.getGlobalBounds();
 }
+
+void Player::setLives(int lives) {
+    this->lives = lives;
+}
+
+int Player::getLives() {
+    return this->lives;
+}
+
+void Player::setSpeedOfMovement(int speed) {
+    this->speedOfMovement = 0;
+}
+
 
 
 
