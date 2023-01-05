@@ -116,12 +116,28 @@ void Game::updateControls() {
     }
 }
 
+void Game::updateCollision() {
+    if (this->newPlayer->getBounds().left < 0.f) {
+        this->newPlayer->setPosition(0.f, this->newPlayer->getBounds().top);
+    } else if (this->newPlayer->getBounds().left + this->newPlayer->getBounds().width >= this->gWindow->getSize().x) {
+        this->newPlayer->setPosition(this->gWindow->getSize().x - this->newPlayer->getBounds().width, this->newPlayer->getBounds().top);
+    }
+
+    if (this->newPlayer->getBounds().top < 0.f) {
+        this->newPlayer->setPosition(this->newPlayer->getBounds().left, 0.f);
+    } else if (this->newPlayer->getBounds().top + this->newPlayer->getBounds().height >= this->gWindow->getSize().y) {
+        this->newPlayer->setPosition(this->newPlayer->getBounds().left, this->gWindow->getSize().y - this->newPlayer->getBounds().height);
+    }
+}
+
 void Game::updateWindow() {
     this->updateEvents();
 
     this->updateControls();
 
     this->newPlayer->updatePlayer();
+
+    this->updateCollision();
 
     this->updateBullets();
 }
@@ -172,6 +188,8 @@ void Game::updateBullets() {
     }
 
 }
+
+
 
 
 

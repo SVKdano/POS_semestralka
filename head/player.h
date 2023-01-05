@@ -57,13 +57,18 @@ class Player {
         void movePlayer(const float dX, const float dY);
         void updatePlayer();
         void renderPlayer(sf::RenderTarget &renderTarget);
-        void updateCD();
+
         const sf::Vector2f &getDirBullet() const;
         const sf::Vector2f &getPosition() const;
+
+        void updateCD();
         void updateDirBullet();
         const bool canShoot();
         void updateTexture(sf::Keyboard::Key key);
         void updateBulletPosition();
         const sf::Vector2f &getBulletPosition() const;
+
+        void setPosition(const float posX, const float posY);
+
         const sf::FloatRect getBounds() const;
 };

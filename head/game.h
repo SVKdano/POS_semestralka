@@ -32,7 +32,7 @@ public:
     void updateControls();
     void updateWindow();
     void updateBullets();
-
+    void updateCollision();
 private:
     void initWindow();
     void initNewPlayer();

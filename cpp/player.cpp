@@ -175,9 +175,15 @@ const sf::Vector2f &Player::getBulletPosition() const {
     return bulletPosition;
 }
 
+void Player::setPosition(const float posX, const float posY) {
+    this->sprite.setPosition(posX, posY);
+}
+
 const sf::FloatRect Player::getBounds() const {
     return this->sprite.getGlobalBounds();
 }
+
+
 
 
 
