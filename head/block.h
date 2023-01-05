@@ -7,24 +7,19 @@
 
 class Block {
 private:
-    sf::RectangleShape block;
-    int x;
-    int y;
+    sf::Sprite sprite;
+    sf::Texture texture;
+    sf::Vector2f position;
+
 
 public:
-    Block();
+    Block(sf::Texture* texture, float posX, float posY);
 
     virtual ~Block();
 
-    void generateBlock(int x, int y, int xP, int yP, const sf::Texture* texture);
-
     const sf::RectangleShape& getBlock() const;
 
-    int getX() const;
+    void renderBlock(sf::RenderTarget *renderTarget);
 
-    void setX(int newX);
-
-    int getY() const;
-
-    void setY(int newY);
+    const sf::FloatRect getBounds() const;
 };

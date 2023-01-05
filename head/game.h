@@ -16,8 +16,10 @@ private:
     sf::RenderWindow* gWindow;
     Player* newPlayer;
     Player* mockedEnemyPlayer;
-    Block home;
-    Block stone;
+    Block* home;
+    Block* stone1;
+    Block* stone2;
+    Block* stone3;
 
 public:
     Game();
@@ -35,4 +37,5 @@ private:
     void initWindow();
     void initNewPlayer();
     void initTextures();
+    void initBlocks();
 };

@@ -10,6 +10,7 @@
 Game::Game() {
     this->initWindow();
     this->initTextures();
+    this->initBlocks();
     this->initNewPlayer();
 }
 
@@ -44,19 +45,34 @@ void Game::initWindow() {
 }
 
 void Game::initNewPlayer() {
-    this->newPlayer = new Player(true);
+    this->newPlayer = new Player(false);
     this->mockedEnemyPlayer = new Player(false);
 }
 
 void Game::initTextures() {
     this->textures["BULLET"] = new sf::Texture();
     this->textures["BULLET"]->loadFromFile("../imgs/strela.png");
+    this->textures["STONE"] = new sf::Texture();
+    this->textures["STONE"]->loadFromFile("../imgs/stone.png");
+    this->textures["HOME"] = new sf::Texture();
+    this->textures["HOME"]->loadFromFile("../imgs/home.png");
+}
+
+void Game::initBlocks() {
+    this->home = new Block(textures["HOME"], 420, 100);
+    this->stone1 = new Block(textures["STONE"], 250, 500);
+    this->stone2 = new Block(textures["STONE"], 500, 380);
+    this->stone3 = new Block(textures["STONE"], 850, 530);
 }
 
 void Game::renderWindow() {
     this->gWindow->clear();
     this->newPlayer->renderPlayer(*this->gWindow);
     this->mockedEnemyPlayer->renderPlayer(*this->gWindow);
+    this->home->renderBlock(this->gWindow);
+    this->stone1->renderBlock(this->gWindow);
+    this->stone2->renderBlock(this->gWindow);
+    this->stone3->renderBlock(this->gWindow);
     for(auto *bullet : this->bullets) {
         bullet->render(this->gWindow);
     }
@@ -142,6 +158,8 @@ void Game::updateBullets() {
     }
 
 }
+
+
 
 
 
