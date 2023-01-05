@@ -37,8 +37,6 @@ class Player {
 
         virtual ~Player();
 
-        sf::RectangleShape generatePlayer(int windowX, int windowY, int playerSize, const sf::Texture pTextures[]);
-
         const sf::RectangleShape &getPlayer() const;
 
         int getDirection() const;
@@ -53,9 +51,6 @@ class Player {
 
         void shoot(std::map<std::string, sf::Texture*> textures);
 
-        void move();
-
-        //news
         void movePlayer(const float dX, const float dY);
         void updatePlayer();
         void renderPlayer(sf::RenderTarget &renderTarget);
@@ -64,5 +59,5 @@ class Player {
         const sf::Vector2f &getPosition() const;
         void updateDirBullet();
         const bool canShoot();
-
+        void updateTexture(sf::Keyboard::Key key);
 };
