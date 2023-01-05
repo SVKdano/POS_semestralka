@@ -11,13 +11,9 @@ class Player {
         sf::RectangleShape player;
         std::vector<Bullet*> bullets;
         const sf::Texture* textures;
-        int x;
-        int y;
-        int size;
         int direction = 2;
         int lives = 3;
 
-        //news
         sf::Sprite sprite;
         sf::Texture texture;
 
@@ -40,15 +36,11 @@ class Player {
 
         virtual ~Player();
 
-        const sf::RectangleShape &getPlayer() const;
-
         int getDirection() const;
 
         void setDirection(int direction);
 
         const std::vector<Bullet *> &getBullets() const;
-
-        void shoot(std::map<std::string, sf::Texture*> textures);
 
         void movePlayer(const float dX, const float dY);
         void updatePlayer();

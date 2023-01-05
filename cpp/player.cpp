@@ -67,10 +67,6 @@ const std::vector<Bullet *> &Player::getBullets() const {
     return bullets;
 }
 
-const sf::RectangleShape &Player::getPlayer() const {
-    return player;
-}
-
 int Player::getDirection() const {
     return direction;
 }
@@ -78,10 +74,6 @@ int Player::getDirection() const {
 
 void Player::setDirection(int direction) {
     Player::direction = direction;
-}
-
-void Player::shoot(std::map<std::string, sf::Texture*> textures) {
-    this->bullets.push_back(new Bullet(textures["BULLET"], this->sprite.getPosition().x, this->sprite.getPosition().y, dirBullet.x, dirBullet.y, 15.f));
 }
 
 void Player::movePlayer(const float dX, const float dY) {
