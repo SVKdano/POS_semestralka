@@ -15,6 +15,7 @@ private:
 
     sf::RenderWindow* gWindow;
     Player* newPlayer;
+    Player* mockedEnemyPlayer;
     Block home;
     Block stone;
 

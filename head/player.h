@@ -29,12 +29,14 @@ class Player {
         float shootingCD;
         float shootingCDMax;
 
+        bool blue = true;
+
         void initTexture();
         void initSprite();
         void initVariables();
 
     public:
-        Player();
+        Player(bool isBlue);
 
         virtual ~Player();
 

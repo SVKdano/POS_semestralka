@@ -16,6 +16,7 @@ Game::Game() {
 Game::~Game() {
     delete this->gWindow;
     delete this->newPlayer;
+    delete this->mockedEnemyPlayer;
 
     for (auto &x : this->textures) {
         delete x.second;
@@ -43,7 +44,8 @@ void Game::initWindow() {
 }
 
 void Game::initNewPlayer() {
-    this->newPlayer = new Player();
+    this->newPlayer = new Player(true);
+    this->mockedEnemyPlayer = new Player(false);
 }
 
 void Game::initTextures() {
@@ -54,6 +56,7 @@ void Game::initTextures() {
 void Game::renderWindow() {
     this->gWindow->clear();
     this->newPlayer->renderPlayer(*this->gWindow);
+    this->mockedEnemyPlayer->renderPlayer(*this->gWindow);
     for(auto *bullet : this->bullets) {
         bullet->render(this->gWindow);
     }
@@ -110,6 +113,7 @@ void Game::updateWindow() {
 
 
 void Game::updateBullets() {
+    //TODO: do not forget to delete cout
     unsigned counter = 0;
     for(auto *bullet : this->bullets) {
         bullet->update();

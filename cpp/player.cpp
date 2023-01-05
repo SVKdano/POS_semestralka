@@ -3,7 +3,8 @@
 //
 #include "../head/player.h"
 
-Player::Player() {
+Player::Player(bool isBlue) {
+    this->blue = isBlue;
     this->initTexture();
     this->initSprite();
     this->initVariables();
@@ -16,10 +17,14 @@ Player::~Player() {
 }
 
 void Player::initTexture() {
-    this->texture.loadFromFile("../imgs/BlueDown.png");
+    if (blue)
+        this->texture.loadFromFile("../imgs/BlueDown.png");
+    if (!blue)
+        this->texture.loadFromFile("../imgs/RedDown.png");
 }
 
 void Player::initSprite() {
+    this->sprite.setPosition((rand() % (1200-100)), (rand() % (800-100)));
     this->sprite.setTexture(this->texture);
 }
 
@@ -117,18 +122,36 @@ void Player::updateCD() {
 }
 
 void Player::updateTexture(sf::Keyboard::Key key) {
-    if (key == sf::Keyboard::Key::W) {
-        this->direction = 0;
-        this->texture.loadFromFile("../imgs/BlueUp.png");
-    } else if (key == sf::Keyboard::Key::D) {
-        this->direction = 1;
-        this->texture.loadFromFile("../imgs/BlueRight.png");
-    } else if (key == sf::Keyboard::Key::S) {
-        this->direction = 2;
-        this->texture.loadFromFile("../imgs/BlueDown.png");
-    } else if (key == sf::Keyboard::Key::A){
-        this->direction = 3;
-        this->texture.loadFromFile("../imgs/BlueLeft.png");
+    if (blue) {
+        if (key == sf::Keyboard::Key::W) {
+            this->direction = 0;
+            this->texture.loadFromFile("../imgs/BlueUp.png");
+        } else if (key == sf::Keyboard::Key::D) {
+            this->direction = 1;
+            this->texture.loadFromFile("../imgs/BlueRight.png");
+        } else if (key == sf::Keyboard::Key::S) {
+            this->direction = 2;
+            this->texture.loadFromFile("../imgs/BlueDown.png");
+        } else if (key == sf::Keyboard::Key::A) {
+            this->direction = 3;
+            this->texture.loadFromFile("../imgs/BlueLeft.png");
+        }
+    }
+
+    if (!blue) {
+        if (key == sf::Keyboard::Key::W) {
+            this->direction = 0;
+            this->texture.loadFromFile("../imgs/RedUp.png");
+        } else if (key == sf::Keyboard::Key::D) {
+            this->direction = 1;
+            this->texture.loadFromFile("../imgs/RedRight.png");
+        } else if (key == sf::Keyboard::Key::S) {
+            this->direction = 2;
+            this->texture.loadFromFile("../imgs/RedDown.png");
+        } else if (key == sf::Keyboard::Key::A) {
+            this->direction = 3;
+            this->texture.loadFromFile("../imgs/RedLeft.png");
+        }
     }
 }
 
