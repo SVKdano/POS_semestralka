@@ -45,7 +45,7 @@ void Game::initWindow() {
 }
 
 void Game::initNewPlayer() {
-    this->newPlayer = new Player(false);
+    this->newPlayer = new Player(true);
     this->mockedEnemyPlayer = new Player(false);
 }
 
@@ -114,7 +114,6 @@ void Game::updateControls() {
                                            this->newPlayer->getBulletPosition().y, this->newPlayer->getDirBullet().x,
                                            this->newPlayer->getDirBullet().y, 15.f));
     }
-
 }
 
 void Game::updateWindow() {
@@ -153,6 +152,21 @@ void Game::updateBullets() {
             this->bullets.erase(bullets.begin() + counter);
             --counter;
             std::cout << this->bullets.size() << "\n";
+        } else if (bullet->getBounds().intersects(this->mockedEnemyPlayer->getBounds()))
+        {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
+            std::cout << "Shoot that G" << std::endl;
+        } else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
+                    bullet->getBounds().intersects(this->stone2->getBounds()) ||
+                    bullet->getBounds().intersects(this->stone3->getBounds()) ||
+                    bullet->getBounds().intersects(this->home->getBounds())
+                    )
+        {
+            delete this->bullets.at(counter);
+            this->bullets.erase(bullets.begin() + counter);
+            --counter;
         }
         ++counter;
     }

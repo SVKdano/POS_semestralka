@@ -65,4 +65,5 @@ class Player {
         void updateTexture(sf::Keyboard::Key key);
         void updateBulletPosition();
         const sf::Vector2f &getBulletPosition() const;
+        const sf::FloatRect getBounds() const;
 };
