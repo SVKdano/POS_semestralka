@@ -38,8 +38,16 @@ Game::~Game() {
 void Game::runGame() {
     while (this->gWindow->isOpen()) {
         this->updateWindow();
-        this->renderWindow();
+        //this->renderWindow();
     }
+}
+
+const bool Game::isWindowOpened() {
+    return this->gWindow->isOpen();
+}
+
+sf::RenderWindow *Game::getWindow() const {
+    return  this->gWindow;
 }
 
 void Game::initWindow() {
@@ -78,11 +86,12 @@ void Game::initMap() {
 }
 
 void Game::initConnection() {
+    std::cout << "som tu connection" << std::endl;
     std::cin >> this->connection;
 
     if (this->connection == 1) {
         sf::TcpListener listener;
-        listener.listen(2023);
+        listener.listen(5000);
         listener.accept(this->socket);
     } else {
         sf::IpAddress iP;
@@ -304,17 +313,3 @@ void Game::resolve(const sf::Vector3f &manifold) {
     sf::Vector2f normal(manifold.x, manifold.y);
     this->newPlayer->setPosition(this->newPlayer->getPosition() + (normal * manifold.z));
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,6 +4,7 @@
 
 
 #pragma once
+
 #include "block.h"
 #include "player.h"
 #include <map>
@@ -31,6 +32,10 @@ private:
 public:
     Game();
     virtual ~Game();
+
+    const bool isWindowOpened();
+
+    sf::RenderWindow *getWindow() const;
 
     void runGame();
     void renderWindow();
