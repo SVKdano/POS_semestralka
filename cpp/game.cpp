@@ -60,8 +60,13 @@ void Game::initWindow() {
 }
 
 void Game::initNewPlayer() {
-    this->newPlayer = new Player(true);
-    this->enemyPlayer = new Player(false);
+    if (this->connection == 1) {
+        this->newPlayer = new Player(true);
+        this->enemyPlayer = new Player(false);
+    } else {
+        this->newPlayer = new Player(false);
+        this->enemyPlayer = new Player(true);
+    }
 }
 
 void Game::initTextures() {
@@ -87,14 +92,13 @@ void Game::initMap() {
 
 void Game::initConnection() {
     std::cout << "som tu connection" << std::endl;
-    //std::string local = this->localIP.toString();
-    //std::cout << local << std::endl;
+    std::string local = this->localIP.toString();
+    std::cout << local << std::endl;
     std::cin >> this->connection;
 
     if (this->connection == 1) {
         sf::TcpListener listener;
         listener.listen(5000);
-        listener.setBlocking(false);
         listener.accept(this->socket);
     } else {
         sf::IpAddress iP;
@@ -221,13 +225,13 @@ void Game::updateWindow() {
         if (this->newPlayer->getPosition() != prevPos) {
             packetMovement << this->newPlayer->getPosition().x << this->newPlayer->getPosition().y
                            << this->newPlayer->getDirection();
-            this->socket.send(packetMovement);
-        }
 
+        }
+        this->socket.send(packetMovement);
         this->socket.receive(packetMovement);
 
         if (packetMovement >> enemyPos.x >> enemyPos.y >> enemyDir) {
-            if (this->newPlayer->getDirection() != enemyDir) {
+            if (this->enemyPlayer->getDirection() != enemyDir) {
                 this->enemyPlayer->setDirection(enemyDir);
             }
             this->enemyPlayer->setPosition(enemyPos);
