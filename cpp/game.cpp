@@ -33,6 +33,10 @@ Game::~Game() {
     for (auto *bullet : this->bullets) {
         delete bullet;
     }
+
+    for (auto *bullet : this->bulletsEnemy) {
+        delete bullet;
+    }
 }
 
 void Game::runGame() {
@@ -130,6 +134,9 @@ void Game::renderWindow() {
     for(auto *bullet : this->bullets) {
         bullet->render(this->gWindow);
     }
+    for(auto *eBullet : this->bulletsEnemy) {
+        eBullet->render(this->gWindow);
+    }
     this->gWindow->display();
 }
 
@@ -209,6 +216,29 @@ void Game::updateCollision() {
     }
 }
 
+
+void Game::updateHit() {
+    unsigned counter = 0;
+    for (auto *bullet : this->bulletsEnemy) {
+        if (bullet->getBounds().intersects(this->newPlayer->getBounds())) {
+
+            int acutalLives = this->newPlayer->getLives();
+            this->newPlayer->setLives(acutalLives - 1);
+
+            if (this->newPlayer->getLives() > 0 ) {
+                this->enemyPlayer->respawn();
+                this->newPlayer->respawn();
+            } else {
+                this->enemyPlayer->respawn();
+                this->enemyPlayer->setSpeedOfMovement(0);
+                this->newPlayer->respawn();
+                this->newPlayer->setSpeedOfMovement(0);
+            }
+            this->clearEnemyBullets();
+        }
+    }
+}
+
 void Game::updateWindow() {
     this->updateEvents();
 
@@ -227,6 +257,8 @@ void Game::updateWindow() {
 
         this->updateBullets();
 
+        this->updateHit();
+
         if (this->newPlayer->getPosition() != prevPos) {
             packetMovement << this->newPlayer->getPosition().x << this->newPlayer->getPosition().y
                            << this->newPlayer->getDirection();
@@ -242,7 +274,37 @@ void Game::updateWindow() {
             this->enemyPlayer->setPosition(enemyPos);
         }
 
+        int size = 0;
+        sf::Packet packetSize;
+        packetSize << this->bullets.size();
 
+        this->socket.send(packetSize);
+        this->socket.receive(packetSize);
+
+        sf::Packet packetBulletX;
+        sf::Packet packetBulletY;
+
+        float posX;
+        float posY;
+
+        for (auto *bullet : this->bullets) {
+            packetBulletX << bullet->getPosition().x;
+            packetBulletY << bullet->getPosition().y;
+        }
+
+        this->socket.send(packetBulletX);
+        this->socket.receive(packetBulletX);
+        this->socket.send(packetBulletY);
+        this->socket.receive(packetBulletY);
+
+        this->clearEnemyBullets();
+        if (packetSize >> size) {
+            for (int i = 0; i < size; i++) {
+                packetBulletX >> posX;
+                packetBulletY >> posY;
+                this->bulletsEnemy.push_back(new Bullet(this->textures["BULLET"], posX, posY, 0, 0, 15.f));
+            }
+        }
     }
 
 }
@@ -272,30 +334,11 @@ void Game::updateBullets() {
             this->bullets.erase(bullets.begin() + counter);
             --counter;
             std::cout << this->bullets.size() << "\n";
-        } else if (bullet->getBounds().intersects(this->newPlayer->getBounds())) {
-            delete this->bullets.at(counter);
-            this->bullets.erase(bullets.begin() + counter);
-            --counter;
-
-            int acutalLives = this->newPlayer->getLives();
-            this->newPlayer->setLives(acutalLives - 1);
-
-            if (this->newPlayer->getLives() > 0 ) {
-                this->enemyPlayer->respawn();
-                this->newPlayer->respawn();
-            } else {
-                this->enemyPlayer->respawn();
-                this->enemyPlayer->setSpeedOfMovement(0);
-                this->newPlayer->respawn();
-                this->newPlayer->setSpeedOfMovement(0);
-            }
-
-        } else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
+        }  else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
                     bullet->getBounds().intersects(this->stone2->getBounds()) ||
                     bullet->getBounds().intersects(this->stone3->getBounds()) ||
                     bullet->getBounds().intersects(this->home->getBounds())
-                    )
-        {
+                    ) {
             delete this->bullets.at(counter);
             this->bullets.erase(bullets.begin() + counter);
             --counter;
@@ -325,3 +368,11 @@ void Game::resolve(const sf::Vector3f &manifold) {
     sf::Vector2f normal(manifold.x, manifold.y);
     this->newPlayer->setPosition(this->newPlayer->getPosition() + (normal * manifold.z));
 }
+
+void Game::clearEnemyBullets() {
+    for (auto *bullet : this->bulletsEnemy) {
+        delete this->bullets.at(0);
+        this->bullets.erase(bullets.begin());
+    }
+}
+

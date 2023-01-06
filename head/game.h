@@ -7,12 +7,15 @@
 
 #include "block.h"
 #include "player.h"
+#include <algorithm>
+#include <vector>
 #include <map>
 
 class Game {
 private:
     std::map<std::string, sf::Texture*> textures;
     std::vector<Bullet*> bullets;
+    std::vector<Bullet*> bulletsEnemy;
 
     sf::RenderWindow* gWindow;
     sf::Texture backroundTexture;
@@ -47,6 +50,7 @@ public:
     void updateWindow();
     void updateBullets();
     void updateCollision();
+    void updateHit();
 private:
     void initWindow();
     void initNewPlayer();
@@ -55,6 +59,7 @@ private:
     void initMap();
     void initConnection();
 
+    void clearEnemyBullets();
     sf::Vector3f getManifold(const sf::FloatRect& overlap, const sf::Vector2f& collisionNormal);
     void resolve(const sf::Vector3f& manifold);
 };
