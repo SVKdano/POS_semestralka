@@ -234,7 +234,6 @@ void Game::updateHit() {
                 this->newPlayer->respawn();
                 this->newPlayer->setSpeedOfMovement(0);
             }
-            this->clearEnemyBullets();
         }
     }
 }
@@ -274,9 +273,10 @@ void Game::updateWindow() {
             this->enemyPlayer->setPosition(enemyPos);
         }
 
-        int size = 0;
+        int size = this->bullets.size();
         sf::Packet packetSize;
-        packetSize << this->bullets.size();
+        std::cout << "Pocet poslanych guliek " << size << std::endl;
+        packetSize << size;
 
         this->socket.send(packetSize);
         this->socket.receive(packetSize);
@@ -299,6 +299,7 @@ void Game::updateWindow() {
 
         this->clearEnemyBullets();
         if (packetSize >> size) {
+            std::cout << "Pocet prijatych guliek " << size << std::endl;
             for (int i = 0; i < size; i++) {
                 packetBulletX >> posX;
                 packetBulletY >> posY;
@@ -370,9 +371,11 @@ void Game::resolve(const sf::Vector3f &manifold) {
 }
 
 void Game::clearEnemyBullets() {
-    for (auto *bullet : this->bulletsEnemy) {
-        delete this->bullets.at(0);
-        this->bullets.erase(bullets.begin());
+    if (this->bulletsEnemy.size() > 0) {
+        for (auto *bullet : this->bulletsEnemy) {
+            delete this->bullets.at(0);
+            this->bullets.erase(bullets.begin());
+        }
     }
 }
 
