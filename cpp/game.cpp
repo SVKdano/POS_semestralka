@@ -257,6 +257,20 @@ void Game::updateHit() {
 }
 
 void Game::updateWindow() {
+
+    if (this->firstTimeRender) {
+        sf::Packet positionPacked;
+        sf::Vector2f positions;
+        firstTimeRender = false;
+        positionPacked << this->enemyPlayer->getPosition().x << this->enemyPlayer->getPosition().y;
+        this->socket.send(positionPacked);
+
+        this->socket.receive(positionPacked);
+        positionPacked >> positions.x >> positions.y;
+
+        this->newPlayer->setPosition(positions);
+    }
+
     this->updateEvents();
 
     if (this->newPlayer->getLives() > 0 && this->enemyPlayer->getLives() > 0) {

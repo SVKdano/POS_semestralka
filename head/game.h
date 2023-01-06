@@ -29,6 +29,7 @@ private:
     Block* stone2;
     Block* stone3;
 
+    bool firstTimeRender = true;
     int connection;
     sf::TcpSocket socket;
     sf::IpAddress localIP = sf::IpAddress::getLocalAddress();
