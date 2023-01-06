@@ -28,6 +28,7 @@ private:
 
     int connection;
     sf::TcpSocket socket;
+    sf::IpAddress localIP = sf::IpAddress::getLocalAddress();
 
 public:
     Game();

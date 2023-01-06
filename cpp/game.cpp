@@ -87,11 +87,14 @@ void Game::initMap() {
 
 void Game::initConnection() {
     std::cout << "som tu connection" << std::endl;
+    //std::string local = this->localIP.toString();
+    //std::cout << local << std::endl;
     std::cin >> this->connection;
 
     if (this->connection == 1) {
         sf::TcpListener listener;
         listener.listen(5000);
+        listener.setBlocking(false);
         listener.accept(this->socket);
     } else {
         sf::IpAddress iP;

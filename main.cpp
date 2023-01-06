@@ -33,7 +33,7 @@ void update(bool * isUpdated, std::mutex *mut, std::condition_variable * render,
 int main()
 {
     std::cout << "som tu" << std::endl;
-    putenv("DISPLAY=192.168.0.104:7.0");
+    putenv("DISPLAY=192.168.0.143");
     //setenv("DISPLAY","192.168.0.104:7.0",true);
     std::mutex mut;
     std::condition_variable rend, upd;
