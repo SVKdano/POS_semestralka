@@ -241,18 +241,20 @@ void Game::updateHit() {
             }
         }
     }
-    packerRespawn << respawned << this->enemyPlayer->getPosition().x << this->enemyPlayer->getPosition().y;
+    packerRespawn << respawned << this->enemyPlayer->getPosition().x << this->enemyPlayer->getPosition().y<< this->newPlayer->getLives();
     this->socket.send(packerRespawn);
 
     this->socket.receive(packerRespawn);
 
     int unpackedRespawn = 0;
+    int enemyLives = 0;
     packerRespawn >> unpackedRespawn;
     if (unpackedRespawn == 1) {
         packerRespawn >> position.x;
         packerRespawn >> position.y;
-
+        packerRespawn >> enemyLives;
         this->newPlayer->setPosition(position);
+        this->enemyPlayer->setLives(enemyLives);
     }
 }
 
@@ -307,7 +309,6 @@ void Game::updateWindow() {
 
         int size = this->bullets.size();
         sf::Packet packetSize;
-        std::cout << "Pocet poslanych guliek " << size << std::endl;
         packetSize << size;
 
         this->socket.send(packetSize);
@@ -331,7 +332,6 @@ void Game::updateWindow() {
 
         this->clearEnemyBullets();
         if (packetSize >> size) {
-            std::cout << "Pocet prijatych guliek " << size << std::endl;
             for (int i = 0; i < size; i++) {
                 packetBulletX >> posX;
                 packetBulletY >> posY;
