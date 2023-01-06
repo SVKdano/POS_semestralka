@@ -373,8 +373,8 @@ void Game::resolve(const sf::Vector3f &manifold) {
 void Game::clearEnemyBullets() {
     if (this->bulletsEnemy.size() > 0) {
         for (auto *bullet : this->bulletsEnemy) {
-            delete this->bullets.at(0);
-            this->bullets.erase(bullets.begin());
+            delete this->bulletsEnemy.at(0);
+            this->bulletsEnemy.erase(bulletsEnemy.begin());
         }
     }
 }
