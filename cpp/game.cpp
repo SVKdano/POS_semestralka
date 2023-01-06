@@ -218,9 +218,14 @@ void Game::updateCollision() {
 
 
 void Game::updateHit() {
+    sf::Packet packerRespawn;
+    int respawned = 0;
+    sf::Vector2f position;
     unsigned counter = 0;
     for (auto *bullet : this->bulletsEnemy) {
         if (bullet->getBounds().intersects(this->newPlayer->getBounds())) {
+
+            respawned = 1;
 
             int acutalLives = this->newPlayer->getLives();
             this->newPlayer->setLives(acutalLives - 1);
@@ -235,6 +240,19 @@ void Game::updateHit() {
                 this->newPlayer->setSpeedOfMovement(0);
             }
         }
+    }
+    packerRespawn << respawned << this->enemyPlayer->getPosition().x << this->enemyPlayer->getPosition().y;
+    this->socket.send(packerRespawn);
+
+    this->socket.receive(packerRespawn);
+
+    int unpackedRespawn = 0;
+    packerRespawn >> unpackedRespawn;
+    if (unpackedRespawn == 1) {
+        packerRespawn >> position.x;
+        packerRespawn >> position.y;
+
+        this->newPlayer->setPosition(position);
     }
 }
 
