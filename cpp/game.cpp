@@ -100,7 +100,7 @@ void Game::initConnection() {
         sf::IpAddress iP;
         std::cout << "Write server IP address." << std::endl;
         std::cin >> iP;
-        if(!socket.connect(iP,2023)) {
+        if(!socket.connect(iP,5000)) {
             std::cout << "Connection successful." << std::endl;
         } else {
             std::cout << "Failed to connect." << std::endl;
