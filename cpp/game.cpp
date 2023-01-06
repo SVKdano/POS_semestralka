@@ -122,6 +122,7 @@ void Game::renderWindow() {
     this->renderMap();
     this->newPlayer->renderPlayer(*this->gWindow);
     this->enemyPlayer->renderPlayer(*this->gWindow);
+    this->enemyPlayer->updateTexture();
     this->home->renderBlock(this->gWindow);
     this->stone1->renderBlock(this->gWindow);
     this->stone2->renderBlock(this->gWindow);
@@ -148,19 +149,23 @@ void Game::updateEvents() {
 void Game::updateControls() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         this->newPlayer->movePlayer(-1.0f, 0.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::A);
+        this->newPlayer->setDirection(3);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         this->newPlayer->movePlayer(0.0f, -1.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::W);
+        this->newPlayer->setDirection(0);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         this->newPlayer->movePlayer(1.0f, 0.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::D);
+        this->newPlayer->setDirection(1);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         this->newPlayer->movePlayer(0.0f, 1.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::S);
+        this->newPlayer->setDirection(2);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->newPlayer->canShoot()) {
         this->bullets.push_back(new Bullet(this->textures["BULLET"], this->newPlayer->getBulletPosition().x,

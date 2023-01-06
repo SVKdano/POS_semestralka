@@ -55,7 +55,7 @@ class Player {
         const sf::Vector2f &getBulletPosition() const;
 
         void updateBulletPosition();
-        void updateTexture(sf::Keyboard::Key key);
+        void updateTexture();
 
         void setPosition(const float posX, const float posY);
         void setPosition(const sf::Vector2f &position);
