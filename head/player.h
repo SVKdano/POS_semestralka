@@ -39,7 +39,6 @@ class Player {
 
         void setDirection(int direction);
 
-
         void movePlayer(const float dX, const float dY);
         void updatePlayer();
         void renderPlayer(sf::RenderTarget &renderTarget);

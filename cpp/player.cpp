@@ -61,10 +61,6 @@ const bool Player::canShoot() {
     return false;
 }
 
-const std::vector<Bullet *> &Player::getBullets() const {
-    return bullets;
-}
-
 int Player::getDirection() const {
     return direction;
 }
