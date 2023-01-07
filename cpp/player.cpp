@@ -12,9 +12,7 @@ Player::Player(bool isBlue) {
 }
 
 Player::~Player() {
-    for (auto *bullet : this->bullets) {
-        delete bullet;
-    }
+
 }
 
 void Player::initTexture() {
