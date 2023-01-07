@@ -99,7 +99,7 @@ void Game::initConnection() {
     std::string local = this->localIP.toString();
     std::cout << local << std::endl;
     std::cout << "If you want to became server write 1." << std::endl;
-    std::cout << "If you want to connect to someone write anything but 1." << std::endl;
+    std::cout << "If you want to connect to someone write anything other then 1." << std::endl;
     std::cin >> this->connection;
 
     if (this->connection == 1) {
