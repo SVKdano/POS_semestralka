@@ -8,6 +8,7 @@
 #define WINDOW_Y  800
 
 Game::Game() {
+    this->initConnection();
     this->initWindow();
     this->initMap();
     this->initTextures();
@@ -18,7 +19,7 @@ Game::Game() {
 Game::~Game() {
     delete this->gWindow;
     delete this->newPlayer;
-    delete this->mockedEnemyPlayer;
+    delete this->enemyPlayer;
 
     delete this->home;
     delete this->stone1;
@@ -32,13 +33,25 @@ Game::~Game() {
     for (auto *bullet : this->bullets) {
         delete bullet;
     }
+
+    for (auto *bullet : this->bulletsEnemy) {
+        delete bullet;
+    }
 }
 
 void Game::runGame() {
     while (this->gWindow->isOpen()) {
         this->updateWindow();
-        this->renderWindow();
+        //this->renderWindow();
     }
+}
+
+const bool Game::isWindowOpened() {
+    return this->gWindow->isOpen();
+}
+
+sf::RenderWindow *Game::getWindow() const {
+    return  this->gWindow;
 }
 
 void Game::initWindow() {
@@ -51,8 +64,13 @@ void Game::initWindow() {
 }
 
 void Game::initNewPlayer() {
-    this->newPlayer = new Player(true);
-    this->mockedEnemyPlayer = new Player(false);
+    if (this->connection == 1) {
+        this->newPlayer = new Player(true);
+        this->enemyPlayer = new Player(false);
+    } else {
+        this->newPlayer = new Player(false);
+        this->enemyPlayer = new Player(true);
+    }
 }
 
 void Game::initTextures() {
@@ -76,6 +94,30 @@ void Game::initMap() {
     this->mapBackround.setTexture(this->backroundTexture);
 }
 
+void Game::initConnection() {
+    std::cout << "Your local ip address" << std::endl;
+    std::string local = this->localIP.toString();
+    std::cout << local << std::endl;
+    std::cout << "If you want to became server write 1." << std::endl;
+    std::cout << "If you want to connect to someone write anything other then 1." << std::endl;
+    std::cin >> this->connection;
+
+    if (this->connection == 1) {
+        sf::TcpListener listener;
+        listener.listen(5000);
+        listener.accept(this->socket);
+    } else {
+        sf::IpAddress iP;
+        std::cout << "Write server IP address." << std::endl;
+        std::cin >> iP;
+        if(!socket.connect(iP,5000)) {
+            std::cout << "Connection successful." << std::endl;
+        } else {
+            std::cout << "Failed to connect." << std::endl;
+        }
+    }
+}
+
 
 void Game::renderMap() {
     this->gWindow->draw(this->mapBackround);
@@ -85,13 +127,17 @@ void Game::renderWindow() {
     this->gWindow->clear();
     this->renderMap();
     this->newPlayer->renderPlayer(*this->gWindow);
-    this->mockedEnemyPlayer->renderPlayer(*this->gWindow);
+    this->enemyPlayer->renderPlayer(*this->gWindow);
+    this->enemyPlayer->updateTexture();
     this->home->renderBlock(this->gWindow);
     this->stone1->renderBlock(this->gWindow);
     this->stone2->renderBlock(this->gWindow);
     this->stone3->renderBlock(this->gWindow);
     for(auto *bullet : this->bullets) {
         bullet->render(this->gWindow);
+    }
+    for(auto *eBullet : this->bulletsEnemy) {
+        eBullet->render(this->gWindow);
     }
     this->gWindow->display();
 }
@@ -112,19 +158,23 @@ void Game::updateEvents() {
 void Game::updateControls() {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         this->newPlayer->movePlayer(-1.0f, 0.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::A);
+        this->newPlayer->setDirection(3);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         this->newPlayer->movePlayer(0.0f, -1.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::W);
+        this->newPlayer->setDirection(0);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         this->newPlayer->movePlayer(1.0f, 0.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::D);
+        this->newPlayer->setDirection(1);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         this->newPlayer->movePlayer(0.0f, 1.0f);
-        this->newPlayer->updateTexture(sf::Keyboard::S);
+        this->newPlayer->setDirection(2);
+        this->newPlayer->updateTexture();
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && this->newPlayer->canShoot()) {
         this->bullets.push_back(new Bullet(this->textures["BULLET"], this->newPlayer->getBulletPosition().x,
@@ -168,16 +218,130 @@ void Game::updateCollision() {
     }
 }
 
+
+void Game::updateHit() {
+    sf::Packet packerRespawn;
+    int respawned = 0;
+    sf::Vector2f position;
+    unsigned counter = 0;
+    for (auto *bullet : this->bulletsEnemy) {
+        if (bullet->getBounds().intersects(this->newPlayer->getBounds())) {
+
+            respawned = 1;
+
+            int acutalLives = this->newPlayer->getLives();
+            this->newPlayer->setLives(acutalLives - 1);
+
+            if (this->newPlayer->getLives() > 0 ) {
+                this->enemyPlayer->respawn();
+                this->newPlayer->respawn();
+            } else {
+                this->enemyPlayer->respawn();
+                this->enemyPlayer->setSpeedOfMovement(0);
+                this->newPlayer->respawn();
+                this->newPlayer->setSpeedOfMovement(0);
+            }
+        }
+    }
+    packerRespawn << respawned << this->enemyPlayer->getPosition().x << this->enemyPlayer->getPosition().y<< this->newPlayer->getLives();
+    this->socket.send(packerRespawn);
+
+    this->socket.receive(packerRespawn);
+
+    int unpackedRespawn = 0;
+    int enemyLives = 0;
+    packerRespawn >> unpackedRespawn;
+    if (unpackedRespawn == 1) {
+        packerRespawn >> position.x;
+        packerRespawn >> position.y;
+        packerRespawn >> enemyLives;
+        this->newPlayer->setPosition(position);
+        this->enemyPlayer->setLives(enemyLives);
+    }
+}
+
 void Game::updateWindow() {
+
+    if (this->firstTimeRender) {
+        sf::Packet positionPacked;
+        sf::Vector2f positions;
+        firstTimeRender = false;
+        positionPacked << this->enemyPlayer->getPosition().x << this->enemyPlayer->getPosition().y;
+        this->socket.send(positionPacked);
+
+        this->socket.receive(positionPacked);
+        positionPacked >> positions.x >> positions.y;
+
+        this->newPlayer->setPosition(positions);
+    }
+
     this->updateEvents();
 
-    this->updateControls();
+    if (this->newPlayer->getLives() > 0 && this->enemyPlayer->getLives() > 0) {
+        sf::Vector2f prevPos, enemyPos;
+        int  prevLife1, prevLife2, life1, life2, enemyDir;
 
-    this->newPlayer->updatePlayer();
+        sf::Packet packetMovement;
+        prevPos = this->newPlayer->getPosition();
 
-    this->updateCollision();
+        this->updateControls();
 
-    this->updateBullets();
+        this->newPlayer->updatePlayer();
+
+        this->updateCollision();
+
+        this->updateBullets();
+
+        this->updateHit();
+
+        if (this->newPlayer->getPosition() != prevPos) {
+            packetMovement << this->newPlayer->getPosition().x << this->newPlayer->getPosition().y
+                           << this->newPlayer->getDirection();
+
+        }
+        this->socket.send(packetMovement);
+        this->socket.receive(packetMovement);
+
+        if (packetMovement >> enemyPos.x >> enemyPos.y >> enemyDir) {
+            if (this->enemyPlayer->getDirection() != enemyDir) {
+                this->enemyPlayer->setDirection(enemyDir);
+            }
+            this->enemyPlayer->setPosition(enemyPos);
+        }
+
+        int size = this->bullets.size();
+        sf::Packet packetSize;
+        packetSize << size;
+
+        this->socket.send(packetSize);
+        this->socket.receive(packetSize);
+
+        sf::Packet packetBulletX;
+        sf::Packet packetBulletY;
+
+        float posX;
+        float posY;
+
+        for (auto *bullet : this->bullets) {
+            packetBulletX << bullet->getPosition().x;
+            packetBulletY << bullet->getPosition().y;
+        }
+
+        this->socket.send(packetBulletX);
+        this->socket.receive(packetBulletX);
+        this->socket.send(packetBulletY);
+        this->socket.receive(packetBulletY);
+
+        this->clearEnemyBullets();
+        if (packetSize >> size) {
+            for (int i = 0; i < size; i++) {
+                packetBulletX >> posX;
+                packetBulletY >> posY;
+                this->bulletsEnemy.push_back(new Bullet(this->textures["BULLET"], posX, posY, 0, 0, 15.f));
+            }
+        }
+    }
+
 }
 
 
@@ -205,33 +369,11 @@ void Game::updateBullets() {
             this->bullets.erase(bullets.begin() + counter);
             --counter;
             std::cout << this->bullets.size() << "\n";
-        } else if (bullet->getBounds().intersects(this->mockedEnemyPlayer->getBounds()))
-        {
-            delete this->bullets.at(counter);
-            this->bullets.erase(bullets.begin() + counter);
-            --counter;
-            std::cout << "Shoot that G" << " bullets size: " << this->bullets.size() << std::endl;
-
-            int acutalLives = this->mockedEnemyPlayer->getLives();
-            this->mockedEnemyPlayer->setLives( acutalLives - 1);
-
-            if (this->mockedEnemyPlayer->getLives() > 0 ) {
-                this->mockedEnemyPlayer->respawn();
-                this->newPlayer->respawn();
-                std::cout << "Actual lives remaining " << this->mockedEnemyPlayer->getLives() << std::endl;
-            } else {
-                this->mockedEnemyPlayer->respawn();
-                this->mockedEnemyPlayer->setSpeedOfMovement(0);
-                this->newPlayer->respawn();
-                this->newPlayer->setSpeedOfMovement(0);
-            }
-
-        } else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
+        }  else if ( bullet->getBounds().intersects(this->stone1->getBounds()) ||
                     bullet->getBounds().intersects(this->stone2->getBounds()) ||
                     bullet->getBounds().intersects(this->stone3->getBounds()) ||
                     bullet->getBounds().intersects(this->home->getBounds())
-                    )
-        {
+                    ) {
             delete this->bullets.at(counter);
             this->bullets.erase(bullets.begin() + counter);
             --counter;
@@ -262,14 +404,12 @@ void Game::resolve(const sf::Vector3f &manifold) {
     this->newPlayer->setPosition(this->newPlayer->getPosition() + (normal * manifold.z));
 }
 
-
-
-
-
-
-
-
-
-
-
+void Game::clearEnemyBullets() {
+    if (this->bulletsEnemy.size() > 0) {
+        for (auto *bullet : this->bulletsEnemy) {
+            delete this->bulletsEnemy.at(0);
+            this->bulletsEnemy.erase(bulletsEnemy.begin());
+        }
+    }
+}
 

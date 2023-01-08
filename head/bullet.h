@@ -27,6 +27,8 @@ public:
 
     void setDirectionBullet(int directionBullet);
 
+    const sf::Vector2f &getPosition() const;
+
     void update();
 
     void render(sf::RenderTarget* target);

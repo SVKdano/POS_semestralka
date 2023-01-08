@@ -12,9 +12,7 @@ Player::Player(bool isBlue) {
 }
 
 Player::~Player() {
-    for (auto *bullet : this->bullets) {
-        delete bullet;
-    }
+
 }
 
 void Player::initTexture() {
@@ -61,10 +59,6 @@ const bool Player::canShoot() {
         return true;
     }
     return false;
-}
-
-const std::vector<Bullet *> &Player::getBullets() const {
-    return bullets;
 }
 
 int Player::getDirection() const {
@@ -132,35 +126,27 @@ void Player::updateCD() {
     }
 }
 
-void Player::updateTexture(sf::Keyboard::Key key) {
+void Player::updateTexture() {
     if (blue) {
-        if (key == sf::Keyboard::Key::W) {
-            this->direction = 0;
+        if (this->direction == 0) {
             this->texture.loadFromFile("../imgs/BlueUp.png");
-        } else if (key == sf::Keyboard::Key::D) {
-            this->direction = 1;
+        } else if (this->direction == 1) {
             this->texture.loadFromFile("../imgs/BlueRight.png");
-        } else if (key == sf::Keyboard::Key::S) {
-            this->direction = 2;
+        } else if (this->direction == 2) {
             this->texture.loadFromFile("../imgs/BlueDown.png");
-        } else if (key == sf::Keyboard::Key::A) {
-            this->direction = 3;
+        } else if (this->direction == 3) {
             this->texture.loadFromFile("../imgs/BlueLeft.png");
         }
     }
 
     if (!blue) {
-        if (key == sf::Keyboard::Key::W) {
-            this->direction = 0;
+        if (this->direction ==0) {
             this->texture.loadFromFile("../imgs/RedUp.png");
-        } else if (key == sf::Keyboard::Key::D) {
-            this->direction = 1;
+        } else if (this->direction == 1) {
             this->texture.loadFromFile("../imgs/RedRight.png");
-        } else if (key == sf::Keyboard::Key::S) {
-            this->direction = 2;
+        } else if (this->direction == 2) {
             this->texture.loadFromFile("../imgs/RedDown.png");
-        } else if (key == sf::Keyboard::Key::A) {
-            this->direction = 3;
+        } else if (this->direction == 3) {
             this->texture.loadFromFile("../imgs/RedLeft.png");
         }
     }

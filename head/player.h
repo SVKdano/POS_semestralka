@@ -9,7 +9,6 @@
 class Player {
     private:
         sf::RectangleShape player;
-        std::vector<Bullet*> bullets;
         const sf::Texture* textures;
         int direction = 2;
         int lives = 3;
@@ -40,8 +39,6 @@ class Player {
 
         void setDirection(int direction);
 
-        const std::vector<Bullet *> &getBullets() const;
-
         void movePlayer(const float dX, const float dY);
         void updatePlayer();
         void renderPlayer(sf::RenderTarget &renderTarget);
@@ -55,7 +52,7 @@ class Player {
         const sf::Vector2f &getBulletPosition() const;
 
         void updateBulletPosition();
-        void updateTexture(sf::Keyboard::Key key);
+        void updateTexture();
 
         void setPosition(const float posX, const float posY);
         void setPosition(const sf::Vector2f &position);

@@ -25,6 +25,10 @@ void Bullet::setDirectionBullet(int directionBullet) {
     Bullet::directionBullet = directionBullet;
 }
 
+const sf::Vector2f &Bullet::getPosition() const {
+    return this->shape.getPosition();
+}
+
 void Bullet::update() {
     this->shape.move(this->speed * this->direction);
 }
