@@ -6,7 +6,7 @@
 
 Game game;
 
-void render(std::condition_variable * renderAll, std::condition_variable * notify, sf::RenderWindow *window, std::mutex *mutex, bool * updating) {
+void renderGame(std::condition_variable * renderAll, std::condition_variable * notify, sf::RenderWindow *window, std::mutex *mutex, bool * updating) {
     while(game.isWindowOpened()) {
         window->setActive(true);
         std::unique_lock<std::mutex> lock(* mutex);
@@ -19,7 +19,7 @@ void render(std::condition_variable * renderAll, std::condition_variable * notif
     }
 }
 
-void update(std::condition_variable * renderAll, std::condition_variable * notify, std::mutex *mutex, bool * updating) {
+void updateGame(std::condition_variable * renderAll, std::condition_variable * notify, std::mutex *mutex, bool * updating) {
     while(game.isWindowOpened()) {
         std::unique_lock<std::mutex> lock(*mutex);
 
@@ -38,8 +38,8 @@ int main()
     bool updating = false;
 
     game.getWindow()->setActive(false);
-    std::thread thread(render, &renderAll, &notify, game.getWindow(), &mutex, &updating);
-    update(&renderAll, &notify, &mutex, &updating);
+    std::thread thread(renderGame, &renderAll, &notify, game.getWindow(), &mutex, &updating);
+    updateGame(&renderAll, &notify, &mutex, &updating);
     thread.join();
 
     return 0;
