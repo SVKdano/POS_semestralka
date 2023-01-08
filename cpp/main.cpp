@@ -1,4 +1,4 @@
-#include "head/game.h"
+#include "../head/game.h"
 #include <thread>
 #include <mutex>
 #include <condition_variable>
