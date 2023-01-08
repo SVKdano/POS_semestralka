@@ -18,7 +18,7 @@ private:
     std::vector<Bullet*> bulletsEnemy;
 
     sf::RenderWindow* gWindow;
-    sf::Texture backroundTexture;
+    sf::Texture* backroundTexture;
     sf::Sprite mapBackround;
 
     Player* newPlayer;

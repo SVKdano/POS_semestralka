@@ -33,7 +33,6 @@ void update(std::condition_variable * renderAll, std::condition_variable * notif
 
 int main()
 {
-    putenv("DISPLAY=192.168.0.143");
     std::condition_variable renderAll, notify;
     std::mutex mutex;
     bool updating = false;
