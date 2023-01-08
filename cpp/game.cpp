@@ -95,11 +95,11 @@ void Game::initMap() {
 }
 
 void Game::initConnection() {
-    std::cout << "Your local ip address" << std::endl;
+    std::cout << "Your local ip address (player who will connect to host must enter this)" << std::endl;
     std::string local = this->localIP.toString();
     std::cout << local << std::endl;
-    std::cout << "If you want to became server write 1." << std::endl;
-    std::cout << "If you want to connect to someone write anything other then 1." << std::endl;
+    std::cout << "If you want to host this game (be server) write 1." << std::endl;
+    std::cout << "If you want to connect to someone (be client) write 2." << std::endl;
     std::cin >> this->connection;
 
     if (this->connection == 1) {
