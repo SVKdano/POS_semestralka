@@ -26,8 +26,6 @@ Game::~Game() {
     delete this->stone2;
     delete this->stone3;
 
-    delete this->backroundTexture;
-
     for (auto &x : this->textures) {
         delete x.second;
     }
@@ -92,8 +90,8 @@ void Game::initBlocks() {
 }
 
 void Game::initMap() {
-    this->backroundTexture->loadFromFile("../imgs/mapa.png");
-    this->mapBackround.setTexture(*this->backroundTexture);
+    this->backroundTexture.loadFromFile("../imgs/mapa.png");
+    this->mapBackround.setTexture(this->backroundTexture);
 }
 
 void Game::initConnection() {
